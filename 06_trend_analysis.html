@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trend Analysis Agent - EggHatch-AI Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EggHatch-AI</h2>
+                <p>Tutorial</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="01_user_interface.html"><i class="fas fa-desktop"></i> User Interface</a></li>
+                    <li><a href="02_master_agent.html"><i class="fas fa-brain"></i> Master Agent</a></li>
+                    <li><a href="03_llm_client.html"><i class="fas fa-comment-dots"></i> LLM Client</a></li>
+                    <li><a href="04_data_pipeline.html"><i class="fas fa-database"></i> Data Pipeline</a></li>
+                    <li><a href="05_sentiment_analysis.html"><i class="fas fa-smile"></i> Sentiment Analysis</a></li>
+                    <li class="active"><a href="06_trend_analysis.html"><i class="fas fa-chart-line"></i> Trend Analysis</a></li>
+                    <li><a href="07_agent_state.html"><i class="fas fa-toggle-on"></i> Agent State</a></li>
+                    <li><a href="08_prompts.html"><i class="fas fa-quote-left"></i> Prompts</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+            </div>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Chapter 6: Trend Analysis Agent</h1>
+            </header>
+            <div class="content-body">
+                <p>Welcome back to the EggHatch AI tutorial! In our last chapter, <a href="05_sentiment_analysis.html">Sentiment Analysis Agent</a>, we learned how to understand the <em>mood</em> of customer reviews – whether people feel positive, negative, or neutral about a product.</p>
+
+                <p>Knowing how people <em>feel</em> is great, but what if we want to know <em>what</em> they are actually talking about? What specific features are causing those positive or negative feelings? What topics come up most often? This is where the <strong>Trend Analysis Agent</strong> steps in.</p>
+
+                <h2>What is the Trend Analysis Agent?</h2>
+
+                <div class="info-box">
+                    <p>Think of the Trend Analysis Agent as your <strong>expert market researcher</strong>. It doesn't just count happy or sad faces; it reads through <em>all</em> the customer feedback and figures out the main topics and features that customers are discussing.</p>
+                </div>
+
+                <p>It acts like a summary engine, finding common themes in large amounts of text and telling you not just <em>what</em> those themes are, but also how people <em>feel</em> about them (by integrating the work of the <a href="05_sentiment_analysis.html">Sentiment Analysis Agent</a>).</p>
+
+                <p>Its main goals are to:</p>
+
+                <ol>
+                    <li>Identify <strong>popular topics</strong> being discussed in reviews (e.g., "battery life," "screen quality," "gaming performance").</li>
+                    <li>Pinpoint specific <strong>product features</strong> people are mentioning.</li>
+                    <li>Understand the <strong>sentiment</strong> associated with these topics and features (e.g., "people talk about battery life, and they feel mostly negative about it").</li>
+                    <li>Track how these topics and sentiments <strong>change over time</strong> (e.g., "after the latest firmware update, people are more positive about battery life").</li>
+                </ol>
+
+                <h2>How the Trend Analysis Agent Works</h2>
+
+                <p>The Trend Analysis Agent in EggHatch AI follows a systematic process to identify and analyze trends:</p>
+
+                <div class="workflow-diagram">
+                    <img src="trend_analysis_workflow.svg" alt="Trend Analysis Workflow" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x250?text=Trend+Analysis+Workflow'">
+                </div>
+
+                <h2>Trend Analysis Techniques</h2>
+
+                <p>The Trend Analysis Agent uses several advanced techniques to extract meaningful insights:</p>
+
+                <div class="component-grid">
+                    <div class="component-card">
+                        <i class="fas fa-tags"></i>
+                        <h3>Topic Extraction</h3>
+                        <p>Identifying key themes and subjects in reviews</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-sort-amount-up"></i>
+                        <h3>Frequency Analysis</h3>
+                        <p>Counting how often specific topics and features are mentioned</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>Co-occurrence Analysis</h3>
+                        <p>Finding relationships between different topics</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Temporal Analysis</h3>
+                        <p>Tracking how trends change over time</p>
+                    </div>
+                </div>
+
+                <h2>The Trend Analysis Implementation</h2>
+
+                <p>Let's look at a simplified version of the Trend Analysis Agent code:</p>
+
+                <div class="code-block">
+                    <pre><code>
+class TrendAnalysisAgent:
+    def __init__(self):
+        # Initialize the LLM client for advanced topic extraction
+        self.llm_client = LLMClient()
+        
+        # Connect to the Sentiment Analysis Agent
+        self.sentiment_agent = SentimentAnalysisAgent()
+        
+        # Load prompts for LLM
+        self.prompts = Prompts()
+        
+        # Initialize topic dictionary for tracking
+        self.topic_dictionary = self._load_topic_dictionary()
+    
+    def _load_topic_dictionary(self):
+        """Load predefined topics and their related terms"""
+        try:
+            import json
+            with open("data/topics/topic_dictionary.json", 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading topic dictionary: {str(e)}")
+            # Return a basic dictionary if file can't be loaded
+            return {
+                "battery": ["battery", "battery life", "charge", "power", "runtime"],
+                "display": ["screen", "display", "resolution", "brightness", "color"],
+                "performance": ["speed", "performance", "fast", "slow", "lag", "fps", "frame rate"],
+                "keyboard": ["keyboard", "keys", "typing", "tactile"],
+                "cooling": ["temperature", "hot", "fan", "cooling", "thermal"],
+                "build_quality": ["build", "quality", "durability", "sturdy", "solid"],
+                "price": ["price", "cost", "expensive", "cheap", "value", "worth"]
+            }
+    
+    def extract_topics(self, reviews, use_llm=True):
+        """
+        Extract main topics from a collection of reviews
+        Returns a dictionary of topics with frequency and sentiment
+        """
+        if not reviews:
+            return {}
+        
+        if use_llm:
+            try:
+                # Use LLM for more nuanced topic extraction
+                return self._extract_topics_with_llm(reviews)
+            except Exception as e:
+                print(f"LLM topic extraction failed: {str(e)}")
+                # Fall back to keyword-based approach
+                return self._extract_topics_with_keywords(reviews)
+        else:
+            # Use simpler keyword-based approach
+            return self._extract_topics_with_keywords(reviews)
+    
+    def _extract_topics_with_llm(self, reviews):
+        """Use LLM to extract topics with more nuance"""
+        # Prepare a sample of reviews for the LLM (to avoid token limits)
+        sample_size = min(20, len(reviews))
+        sample_reviews = [review["text"] for review in reviews[:sample_size]]
+        
+        # Create the prompt with the sample reviews
+        review_text = "\n\n".join(sample_reviews)
+        prompt = self.prompts.get_prompt("topic_extraction").format(reviews=review_text)
+        
+        # Get response from LLM
+        response = self.llm_client.generate_text(prompt)
+        
+        try:
+            # Parse the LLM response
+            import json
+            extracted_topics = json.loads(response)
+            
+            # Ensure the result has the expected format
+            if not isinstance(extracted_topics, dict):
+                raise ValueError("LLM response is not a dictionary")
+                
+            # Now analyze all reviews with these topics
+            return self._analyze_topics_in_reviews(reviews, extracted_topics)
+        except Exception as e:
+            print(f"Error parsing LLM topic extraction response: {str(e)}")
+            # Fall back to keyword-based approach
+            return self._extract_topics_with_keywords(reviews)
+    
+    def _extract_topics_with_keywords(self, reviews):
+        """
+        Use a keyword-based approach for topic extraction
+        This is a fallback when the LLM approach fails
+        """
+        # Initialize topic counters
+        topics = {topic: {"count": 0, "mentions": [], "sentiment_score": 0} 
+                 for topic in self.topic_dictionary}
+        
+        # Process each review
+        for review in reviews:
+            review_text = review["text"].lower()
+            
+            # Check for each topic's keywords in the review
+            for topic, keywords in self.topic_dictionary.items():
+                for keyword in keywords:
+                    if keyword.lower() in review_text:
+                        # Topic found in this review
+                        topics[topic]["count"] += 1
+                        
+                        # Store the mention with its context
+                        start_idx = max(0, review_text.find(keyword) - 50)
+                        end_idx = min(len(review_text), review_text.find(keyword) + len(keyword) + 50)
+                        context = review_text[start_idx:end_idx]
+                        
+                        topics[topic]["mentions"].append({
+                            "review_id": review.get("id", "unknown"),
+                            "context": context
+                        })
+                        
+                        # Only count each topic once per review
+                        break
+        
+        # Analyze sentiment for each topic
+        for topic, data in topics.items():
+            if data["count"] > 0:
+                # Get all mentions of this topic
+                topic_mentions = [m["context"] for m in data["mentions"]]
+                
+                # Analyze sentiment for these mentions
+                sentiments = [self.sentiment_agent.analyze_sentiment(mention) 
+                             for mention in topic_mentions]
+                
+                # Calculate average sentiment score
+                data["sentiment_score"] = sum(s["score"] for s in sentiments) / len(sentiments)
+                
+                # Determine sentiment polarity
+                if data["sentiment_score"] > 0.1:
+                    data["sentiment"] = "positive"
+                elif data["sentiment_score"] < -0.1:
+                    data["sentiment"] = "negative"
+                else:
+                    data["sentiment"] = "neutral"
+        
+        # Remove topics with no mentions
+        topics = {k: v for k, v in topics.items() if v["count"] > 0}
+        
+        return topics
+    
+    def _analyze_topics_in_reviews(self, reviews, extracted_topics):
+        """
+        Analyze all reviews based on topics extracted by LLM
+        This provides more comprehensive analysis than just the sample
+        """
+        # Initialize counters for each topic
+        topics = {topic: {"count": 0, "mentions": [], "sentiment_score": 0} 
+                 for topic in extracted_topics}
+        
+        # Process each review
+        for review in reviews:
+            review_text = review["text"].lower()
+            
+            # Check for each topic's keywords in the review
+            for topic, topic_data in extracted_topics.items():
+                keywords = topic_data.get("keywords", [topic])
+                
+                for keyword in keywords:
+                    if keyword.lower() in review_text:
+                        # Topic found in this review
+                        topics[topic]["count"] += 1
+                        
+                        # Store the mention with its context
+                        start_idx = max(0, review_text.find(keyword) - 50)
+                        end_idx = min(len(review_text), review_text.find(keyword) + len(keyword) + 50)
+                        context = review_text[start_idx:end_idx]
+                        
+                        topics[topic]["mentions"].append({
+                            "review_id": review.get("id", "unknown"),
+                            "context": context
+                        })
+                        
+                        # Only count each topic once per review
+                        break
+        
+        # Analyze sentiment for each topic
+        for topic, data in topics.items():
+            if data["count"] > 0:
+                # Get all mentions of this topic
+                topic_mentions = [m["context"] for m in data["mentions"]]
+                
+                # Analyze sentiment for these mentions
+                sentiments = [self.sentiment_agent.analyze_sentiment(mention) 
+                             for mention in topic_mentions]
+                
+                # Calculate average sentiment score
+                data["sentiment_score"] = sum(s["score"] for s in sentiments) / len(sentiments)
+                
+                # Determine sentiment polarity
+                if data["sentiment_score"] > 0.1:
+                    data["sentiment"] = "positive"
+                elif data["sentiment_score"] < -0.1:
+                    data["sentiment"] = "negative"
+                else:
+                    data["sentiment"] = "neutral"
+                
+                # Add keywords from LLM extraction
+                data["keywords"] = extracted_topics[topic].get("keywords", [topic])
+        
+        # Remove topics with no mentions
+        topics = {k: v for k, v in topics.items() if v["count"] > 0}
+        
+        return topics
+    
+    def analyze_trends(self, reviews, time_period=None):
+        """
+        Analyze trends in reviews, optionally within a specific time period
+        Returns topic trends and their changes over time
+        """
+        # Extract topics from all reviews
+        topics = self.extract_topics(reviews)
+        
+        # If no time period specified, just return current topics
+        if not time_period:
+            return {
+                "topics": topics,
+                "temporal_analysis": None
+            }
+        
+        # For temporal analysis, group reviews by time periods
+        import datetime
+        
+        # Convert time_period to days
+        if time_period == "week":
+            days = 7
+        elif time_period == "month":
+            days = 30
+        elif time_period == "quarter":
+            days = 90
+        else:
+            days = int(time_period)
+        
+        # Group reviews by time periods
+        grouped_reviews = {}
+        for review in reviews:
+            # Parse review date
+            try:
+                review_date = datetime.datetime.fromisoformat(review.get("date", ""))
+                period_key = review_date.strftime("%Y-%m-%d")
+                
+                if period_key not in grouped_reviews:
+                    grouped_reviews[period_key] = []
+                    
+                grouped_reviews[period_key].append(review)
+            except:
+                # Skip reviews with invalid dates
+                continue
+        
+        # Sort periods chronologically
+        sorted_periods = sorted(grouped_reviews.keys())
+        
+        # Analyze topics for each period
+        period_topics = {}
+        for period in sorted_periods:
+            period_topics[period] = self.extract_topics(grouped_reviews[period])
+        
+        # Analyze changes between periods
+        trend_changes = {}
+        for i in range(1, len(sorted_periods)):
+            current_period = sorted_periods[i]
+            previous_period = sorted_periods[i-1]
+            
+            current_topics = period_topics[current_period]
+            previous_topics = period_topics[previous_period]
+            
+            changes = {}
+            # Find topics in both periods and calculate changes
+            for topic in set(current_topics.keys()) | set(previous_topics.keys()):
+                current_data = current_topics.get(topic, {"count": 0, "sentiment_score": 0})
+                previous_data = previous_topics.get(topic, {"count": 0, "sentiment_score": 0})
+                
+                # Calculate changes
+                count_change = current_data["count"] - previous_data["count"]
+                sentiment_change = current_data.get("sentiment_score", 0) - previous_data.get("sentiment_score", 0)
+                
+                changes[topic] = {
+                    "count_change": count_change,
+                    "sentiment_change": sentiment_change,
+                    "is_new": topic in current_topics and topic not in previous_topics,
+                    "is_trending_up": count_change > 0,
+                    "sentiment_improving": sentiment_change > 0.1
+                }
+            
+            trend_changes[f"{previous_period}_to_{current_period}"] = changes
+        
+        return {
+            "topics": topics,
+            "temporal_analysis": {
+                "period_topics": period_topics,
+                "trend_changes": trend_changes
+            }
+        }
+                    </code></pre>
+                </div>
+
+                <h2>Key Features of the Trend Analysis Agent</h2>
+
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>LLM-Powered</h3>
+                        <p>Uses advanced language models for nuanced topic extraction</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-keyboard"></i>
+                        <h3>Keyword Fallback</h3>
+                        <p>Has a simpler keyword-based approach as backup</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>Temporal Analysis</h3>
+                        <p>Tracks how topics and sentiments change over time</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-link"></i>
+                        <h3>Integration</h3>
+                        <p>Works with Sentiment Analysis Agent for deeper insights</p>
+                    </div>
+                </div>
+
+                <h2>Example: Trend Analysis in Action</h2>
+
+                <p>Let's see how the Trend Analysis Agent would process a collection of reviews for a gaming laptop:</p>
+
+                <div class="example-box">
+                    <h4>Trend Analysis Result:</h4>
+                    <pre>{
+  "topics": {
+    "performance": {
+      "count": 45,
+      "sentiment": "positive",
+      "sentiment_score": 0.78,
+      "keywords": ["performance", "speed", "fast", "fps", "frame rate", "gaming"]
+    },
+    "battery_life": {
+      "count": 38,
+      "sentiment": "negative",
+      "sentiment_score": -0.65,
+      "keywords": ["battery", "battery life", "charge", "power", "runtime"]
+    },
+    "display": {
+      "count": 32,
+      "sentiment": "positive",
+      "sentiment_score": 0.85,
+      "keywords": ["screen", "display", "resolution", "brightness", "color"]
+    },
+    "cooling": {
+      "count": 28,
+      "sentiment": "neutral",
+      "sentiment_score": -0.05,
+      "keywords": ["temperature", "hot", "fan", "cooling", "thermal"]
+    },
+    "keyboard": {
+      "count": 22,
+      "sentiment": "positive",
+      "sentiment_score": 0.62,
+      "keywords": ["keyboard", "keys", "typing", "tactile"]
+    }
+  },
+  "temporal_analysis": {
+    "trend_changes": {
+      "2023-01_to_2023-02": {
+        "cooling": {
+          "count_change": 8,
+          "sentiment_change": 0.25,
+          "is_trending_up": true,
+          "sentiment_improving": true
+        }
+      }
+    }
+  }
+}</pre>
+                </div>
+
+                <p>This analysis shows that while performance and display are positively received, battery life is a consistent pain point. It also reveals that discussions about cooling increased in February 2023, with sentiment improving (possibly due to a firmware update or design change).</p>
+
+                <h2>Business Value of Trend Analysis</h2>
+
+                <p>The insights from the Trend Analysis Agent provide tremendous value for different stakeholders:</p>
+
+                <ul>
+                    <li><strong>For Consumers:</strong> Understand what features matter most to other users and where products excel or fall short</li>
+                    <li><strong>For Retailers:</strong> Identify which product aspects to highlight in marketing and which concerns to address in product descriptions</li>
+                    <li><strong>For Manufacturers:</strong> Discover which features need improvement in future product iterations</li>
+                    <li><strong>For Support Teams:</strong> Anticipate common issues customers might face and prepare solutions</li>
+                </ul>
+
+                <h2>Next Steps</h2>
+
+                <p>Now that you understand how the Trend Analysis Agent identifies patterns and topics in reviews, let's move on to <a href="07_agent_state.html">Chapter 7: Agent State</a>, where we'll explore how EggHatch AI maintains context and memory during conversations.</p>
+            </div>
+            <footer>
+                <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

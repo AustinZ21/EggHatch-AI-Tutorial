@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompts - EggHatch-AI Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EggHatch-AI</h2>
+                <p>Tutorial</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="01_user_interface.html"><i class="fas fa-desktop"></i> User Interface</a></li>
+                    <li><a href="02_master_agent.html"><i class="fas fa-brain"></i> Master Agent</a></li>
+                    <li><a href="03_llm_client.html"><i class="fas fa-comment-dots"></i> LLM Client</a></li>
+                    <li><a href="04_data_pipeline.html"><i class="fas fa-database"></i> Data Pipeline</a></li>
+                    <li><a href="05_sentiment_analysis.html"><i class="fas fa-smile"></i> Sentiment Analysis</a></li>
+                    <li><a href="06_trend_analysis.html"><i class="fas fa-chart-line"></i> Trend Analysis</a></li>
+                    <li><a href="07_agent_state.html"><i class="fas fa-toggle-on"></i> Agent State</a></li>
+                    <li class="active"><a href="08_prompts.html"><i class="fas fa-quote-left"></i> Prompts</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+            </div>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Chapter 8: Prompts</h1>
+            </header>
+            <div class="content-body">
+                <p>Welcome back to the EggHatch AI tutorial! In the last chapter, <a href="07_agent_state.html">Agent State</a>, we saw how the <a href="02_master_agent.html">Master Agent (Orchestrator)</a> uses a shared notebook, the Agent State, to keep track of all the information gathered as it processes your request. This state includes your original question, extracted details like your budget, and the results from specialized agents like the <a href="06_trend_analysis.html">Trend Analysis Agent</a>.</p>
+
+                <p>But how does the system actually <em>tell</em> the AI model what to do with this information? How does it instruct the AI to understand your question, extract details, or write a helpful response using the data collected? This is where <strong>Prompts</strong> come in.</p>
+
+                <h2>What are Prompts?</h2>
+
+                <div class="info-box">
+                    <p>Think of prompts as the <strong>instructions</strong> or <strong>scripts</strong> that we give to the AI model through the <a href="03_llm_client.html">LLM Client</a>. They are formatted pieces of text designed to guide the AI to perform a very specific task.</p>
+                </div>
+
+                <p>In the context of EggHatch AI, prompts are what tell the underlying Large Language Model (LLM) things like:</p>
+
+                <ul>
+                    <li>"Read this user's question and tell me if they want a laptop recommendation or a PC build."</li>
+                    <li>"Here are the results from the analysis. Write a helpful summary for the user based <em>only</em> on this data."</li>
+                    <li>"Act as a tech assistant and keep your answers focused on PC parts."</li>
+                </ul>
+
+                <p>They are the blueprints that dictate the AI's behavior and the nature of its output at various points in our system's workflow.</p>
+
+                <h2>How Prompts Work in EggHatch AI</h2>
+
+                <p>The Prompts system in EggHatch AI follows a structured approach to communicate with the language model:</p>
+
+                <div class="workflow-diagram">
+                    <img src="prompts_workflow.svg" alt="Prompts Workflow" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x250?text=Prompts+Workflow'">
+                </div>
+
+                <h2>Types of Prompts in EggHatch AI</h2>
+
+                <p>EggHatch AI uses several types of prompts for different purposes:</p>
+
+                <div class="component-grid">
+                    <div class="component-card">
+                        <i class="fas fa-user-tag"></i>
+                        <h3>System Prompts</h3>
+                        <p>Define the AI's role and overall behavior</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-filter"></i>
+                        <h3>Extraction Prompts</h3>
+                        <p>Extract specific information from user queries</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Analysis Prompts</h3>
+                        <p>Guide specialized analysis of data</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-pen-fancy"></i>
+                        <h3>Response Prompts</h3>
+                        <p>Generate helpful, natural responses to users</p>
+                    </div>
+                </div>
+
+                <h2>The Prompts Implementation</h2>
+
+                <p>Let's look at a simplified version of the Prompts management code:</p>
+
+                <div class="code-block">
+                    <pre><code>
+class Prompts:
+    def __init__(self, prompt_dir="prompts"):
+        """Initialize the prompts manager with a directory of prompt templates"""
+        self.prompt_dir = prompt_dir
+        self.prompts = {}
+        self.load_prompts()
+    
+    def load_prompts(self):
+        """Load all prompt templates from the prompts directory"""
+        try:
+            import os
+            import json
+            
+            # Ensure the prompts directory exists
+            if not os.path.exists(self.prompt_dir):
+                os.makedirs(self.prompt_dir)
+                self._create_default_prompts()
+            
+            # Load each prompt file
+            for filename in os.listdir(self.prompt_dir):
+                if filename.endswith(".json"):
+                    prompt_name = filename[:-5]  # Remove .json extension
+                    file_path = os.path.join(self.prompt_dir, filename)
+                    
+                    with open(file_path, 'r') as f:
+                        prompt_data = json.load(f)
+                        
+                    self.prompts[prompt_name] = prompt_data
+                    
+            print(f"Loaded {len(self.prompts)} prompts")
+        except Exception as e:
+            print(f"Error loading prompts: {str(e)}")
+            # Create default prompts if loading fails
+            self._create_default_prompts()
+    
+    def _create_default_prompts(self):
+        """Create default prompts if none exist"""
+        import os
+        import json
+        
+        default_prompts = {
+            "system": {
+                "description": "System prompt that defines the AI's role",
+                "template": """You are EggHatch AI, a specialized assistant for PC and tech product recommendations.
+Your goal is to help users find the best tech products for their needs and budget.
+Always be helpful, accurate, and focused on tech products.
+Base your recommendations only on factual information and user preferences.
+If you don't know something, admit it rather than making up information."""
+            },
+            "parameter_extraction": {
+                "description": "Extract parameters from user query",
+                "template": """Extract the key parameters from the following user query.
+Return the results as a JSON object with the following fields:
+- budget: The maximum amount the user wants to spend (number, no currency symbol)
+- product_type: The type of product they're looking for (e.g., 'laptop', 'desktop', 'monitor')
+- preferences: An object containing any preferences mentioned (e.g., brand, purpose, features)
+- constraints: An object containing any constraints or requirements
+
+USER QUERY: {query}
+
+EXTRACTED PARAMETERS:"""
+            },
+            "sentiment_analysis": {
+                "description": "Analyze sentiment in text",
+                "template": """Analyze the sentiment of the following text.
+Return the results as a JSON object with the following fields:
+- polarity: Either 'positive', 'negative', or 'neutral'
+- score: A number between -1.0 (very negative) and 1.0 (very positive)
+- aspects: An object where keys are aspects mentioned (e.g., 'battery', 'screen') and values are objects with 'polarity' and 'score'
+
+TEXT: {text}
+
+SENTIMENT ANALYSIS:"""
+            },
+            "topic_extraction": {
+                "description": "Extract topics from reviews",
+                "template": """Extract the main topics discussed in these product reviews.
+For each topic, identify related keywords.
+Return the results as a JSON object where keys are topic names and values are objects with a 'keywords' array.
+
+REVIEWS:
+{reviews}
+
+EXTRACTED TOPICS:"""
+            },
+            "product_recommendation": {
+                "description": "Generate product recommendations",
+                "template": """Based on the user's query and the analysis results, recommend appropriate products.
+Focus on matching the user's budget, preferences, and requirements.
+Highlight key features and explain why each recommendation is suitable.
+
+USER QUERY: {query}
+
+EXTRACTED PARAMETERS:
+{parameters}
+
+MATCHING PRODUCTS:
+{products}
+
+SENTIMENT ANALYSIS:
+{sentiment}
+
+TREND ANALYSIS:
+{trends}
+
+RECOMMENDATIONS:"""
+            },
+            "final_response": {
+                "description": "Generate final response to user",
+                "template": """Create a helpful, conversational response to the user's query.
+Include the recommended products and explain why they match the user's needs.
+Mention relevant insights from review analysis if available.
+Keep the tone friendly but professional, and focus on being informative.
+
+USER QUERY: {query}
+
+RECOMMENDATIONS:
+{recommendations}
+
+RESPONSE:"""
+            }
+        }
+        
+        # Create the prompts directory if it doesn't exist
+        if not os.path.exists(self.prompt_dir):
+            os.makedirs(self.prompt_dir)
+        
+        # Save each default prompt to a file
+        for prompt_name, prompt_data in default_prompts.items():
+            file_path = os.path.join(self.prompt_dir, f"{prompt_name}.json")
+            
+            with open(file_path, 'w') as f:
+                json.dump(prompt_data, f, indent=2)
+            
+            self.prompts[prompt_name] = prompt_data
+    
+    def get_prompt(self, prompt_name):
+        """Get a prompt template by name"""
+        if prompt_name in self.prompts:
+            return self.prompts[prompt_name]["template"]
+        else:
+            raise ValueError(f"Prompt '{prompt_name}' not found")
+    
+    def format_prompt(self, prompt_name, **kwargs):
+        """Format a prompt template with the provided variables"""
+        template = self.get_prompt(prompt_name)
+        
+        try:
+            return template.format(**kwargs)
+        except KeyError as e:
+            missing_key = str(e).strip("'")
+            raise ValueError(f"Missing required variable '{missing_key}' for prompt '{prompt_name}'")
+    
+    def add_prompt(self, prompt_name, description, template):
+        """Add a new prompt or update an existing one"""
+        import os
+        import json
+        
+        self.prompts[prompt_name] = {
+            "description": description,
+            "template": template
+        }
+        
+        # Save the prompt to a file
+        file_path = os.path.join(self.prompt_dir, f"{prompt_name}.json")
+        
+        with open(file_path, 'w') as f:
+            json.dump(self.prompts[prompt_name], f, indent=2)
+            
+        return True
+    
+    def list_prompts(self):
+        """List all available prompts with their descriptions"""
+        return {name: data["description"] for name, data in self.prompts.items()}
+                    </code></pre>
+                </div>
+
+                <h2>Key Features of the Prompts System</h2>
+
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Templating</h3>
+                        <p>Uses dynamic templates that can be filled with specific data</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Modularity</h3>
+                        <p>Organizes prompts by function for easy management</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-edit"></i>
+                        <h3>Customization</h3>
+                        <p>Allows prompts to be modified or added without code changes</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-sync"></i>
+                        <h3>Persistence</h3>
+                        <p>Stores prompts in files for easy version control</p>
+                    </div>
+                </div>
+
+                <h2>Example: Prompts in Action</h2>
+
+                <p>Let's see how prompts are used in a real interaction:</p>
+
+                <div class="example-box">
+                    <h4>User Query:</h4>
+                    <blockquote>
+                        "I need a gaming laptop under $1500 with good battery life for college."
+                    </blockquote>
+                    
+                    <h4>Parameter Extraction Prompt:</h4>
+                    <pre>Extract the key parameters from the following user query.
+Return the results as a JSON object with the following fields:
+- budget: The maximum amount the user wants to spend (number, no currency symbol)
+- product_type: The type of product they're looking for (e.g., 'laptop', 'desktop', 'monitor')
+- preferences: An object containing any preferences mentioned (e.g., brand, purpose, features)
+- constraints: An object containing any constraints or requirements
+
+USER QUERY: I need a gaming laptop under $1500 with good battery life for college.
+
+EXTRACTED PARAMETERS:</pre>
+
+                    <h4>LLM Response:</h4>
+                    <pre>{
+  "budget": 1500,
+  "product_type": "laptop",
+  "preferences": {
+    "purpose": ["gaming", "college"],
+    "features": ["good battery life"]
+  },
+  "constraints": {}
+}</pre>
+                </div>
+
+                <p>This example shows how a well-crafted prompt can guide the AI to extract structured information from a simple user query.</p>
+
+                <h2>The Art of Prompt Engineering</h2>
+
+                <p>Creating effective prompts is both an art and a science. Here are some key principles EggHatch AI follows:</p>
+
+                <ul>
+                    <li><strong>Clarity:</strong> Prompts should provide clear, unambiguous instructions</li>
+                    <li><strong>Specificity:</strong> Specify exactly what format and information you want returned</li>
+                    <li><strong>Context:</strong> Include relevant context from the Agent State</li>
+                    <li><strong>Examples:</strong> For complex tasks, include examples of desired outputs</li>
+                    <li><strong>Constraints:</strong> Set boundaries on what the AI should and shouldn't do</li>
+                    <li><strong>Role Definition:</strong> Define the AI's role and perspective clearly</li>
+                </ul>
+
+                <h2>Conclusion: The Complete EggHatch AI System</h2>
+
+                <p>Congratulations! You've now explored all the key components of the EggHatch AI system:</p>
+
+                <ol>
+                    <li>The <a href="01_user_interface.html">User Interface</a> that you interact with</li>
+                    <li>The <a href="02_master_agent.html">Master Agent</a> that orchestrates the entire process</li>
+                    <li>The <a href="03_llm_client.html">LLM Client</a> that communicates with the AI model</li>
+                    <li>The <a href="04_data_pipeline.html">Data Pipeline</a> that prepares data for analysis</li>
+                    <li>The <a href="05_sentiment_analysis.html">Sentiment Analysis Agent</a> that understands emotions in reviews</li>
+                    <li>The <a href="06_trend_analysis.html">Trend Analysis Agent</a> that identifies patterns and topics</li>
+                    <li>The <a href="07_agent_state.html">Agent State</a> that maintains context throughout the process</li>
+                    <li>The <a href="08_prompts.html">Prompts</a> that guide the AI's behavior and responses</li>
+                </ol>
+
+                <p>Together, these components create a powerful system that can understand your tech needs, analyze product information and reviews, and provide personalized recommendations.</p>
+
+                <p>We hope this tutorial has given you a good understanding of how EggHatch AI works under the hood. If you're interested in exploring further, check out the <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank">GitHub repository</a> for the complete code.</p>
+
+                <p>Happy tech shopping with EggHatch AI!</p>
+            </div>
+            <footer>
+                <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

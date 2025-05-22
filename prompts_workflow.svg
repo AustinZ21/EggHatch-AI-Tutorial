@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="250" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="250" fill="#f8f9fa" rx="10" ry="10"/>
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial" font-size="18" text-anchor="middle" fill="#2c3e50">Prompts Workflow</text>
+  
+  <!-- Components -->
+  <!-- Agent State -->
+  <rect x="50" y="80" width="120" height="60" rx="5" ry="5" fill="#3498db" opacity="0.8"/>
+  <text x="110" y="115" font-family="Arial" font-size="14" text-anchor="middle" fill="white">Agent State</text>
+  
+  <!-- Prompt Templates -->
+  <rect x="220" y="80" width="120" height="60" rx="5" ry="5" fill="#2c3e50" opacity="0.9"/>
+  <text x="280" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="white">Prompt</text>
+  <text x="280" y="125" font-family="Arial" font-size="14" text-anchor="middle" fill="white">Templates</text>
+  
+  <!-- Formatted Prompt -->
+  <rect x="390" y="80" width="120" height="60" rx="5" ry="5" fill="#e74c3c" opacity="0.8"/>
+  <text x="450" y="105" font-family="Arial" font-size="14" text-anchor="middle" fill="white">Formatted</text>
+  <text x="450" y="125" font-family="Arial" font-size="14" text-anchor="middle" fill="white">Prompt</text>
+  
+  <!-- LLM Client -->
+  <rect x="560" y="80" width="120" height="60" rx="5" ry="5" fill="#9b59b6" opacity="0.8"/>
+  <text x="620" y="115" font-family="Arial" font-size="14" text-anchor="middle" fill="white">LLM Client</text>
+  
+  <!-- LLM Response -->
+  <rect x="560" y="180" width="120" height="60" rx="5" ry="5" fill="#2ecc71" opacity="0.8"/>
+  <text x="620" y="205" font-family="Arial" font-size="14" text-anchor="middle" fill="white">LLM Response</text>
+  <text x="620" y="225" font-family="Arial" font-size="12" text-anchor="middle" fill="white">(Structured Data)</text>
+  
+  <!-- Connector Lines -->
+  <!-- Agent State to Prompt Templates -->
+  <line x1="170" y1="110" x2="220" y2="110" stroke="#666" stroke-width="2"/>
+  <polygon points="220,110 210,105 210,115" fill="#666"/>
+  <text x="195" y="100" font-family="Arial" font-size="10" text-anchor="middle" fill="#666">Context</text>
+  
+  <!-- Prompt Templates to Formatted Prompt -->
+  <line x1="340" y1="110" x2="390" y2="110" stroke="#666" stroke-width="2"/>
+  <polygon points="390,110 380,105 380,115" fill="#666"/>
+  <text x="365" y="100" font-family="Arial" font-size="10" text-anchor="middle" fill="#666">Format</text>
+  
+  <!-- Formatted Prompt to LLM Client -->
+  <line x1="510" y1="110" x2="560" y2="110" stroke="#666" stroke-width="2"/>
+  <polygon points="560,110 550,105 550,115" fill="#666"/>
+  <text x="535" y="100" font-family="Arial" font-size="10" text-anchor="middle" fill="#666">Send</text>
+  
+  <!-- LLM Client to LLM Response -->
+  <line x1="620" y1="140" x2="620" y2="180" stroke="#666" stroke-width="2"/>
+  <polygon points="620,180 615,170 625,170" fill="#666"/>
+  <text x="640" y="160" font-family="Arial" font-size="10" text-anchor="middle" fill="#666">Generate</text>
+  
+  <!-- LLM Response to Agent State -->
+  <path d="M 560,210 Q 300,210 110,140" stroke="#666" stroke-width="2" fill="none"/>
+  <polygon points="110,140 120,145 115,135" fill="#666"/>
+  <text x="300" y="225" font-family="Arial" font-size="10" text-anchor="middle" fill="#666">Update State with Response</text>
+  
+  <!-- Prompt Template Types -->
+  <rect x="220" y="150" width="120" height="90" rx="5" ry="5" fill="#ecf0f1" stroke="#2c3e50"/>
+  <text x="280" y="165" font-family="Arial" font-size="10" text-anchor="middle" fill="#2c3e50">• System Prompts</text>
+  <text x="280" y="180" font-family="Arial" font-size="10" text-anchor="middle" fill="#2c3e50">• Extraction Prompts</text>
+  <text x="280" y="195" font-family="Arial" font-size="10" text-anchor="middle" fill="#2c3e50">• Analysis Prompts</text>
+  <text x="280" y="210" font-family="Arial" font-size="10" text-anchor="middle" fill="#2c3e50">• Response Prompts</text>
+  <text x="280" y="225" font-family="Arial" font-size="10" text-anchor="middle" fill="#2c3e50">• Specialized Prompts</text>
+</svg>

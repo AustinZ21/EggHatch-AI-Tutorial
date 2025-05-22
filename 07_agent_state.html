@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent State - EggHatch-AI Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EggHatch-AI</h2>
+                <p>Tutorial</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="01_user_interface.html"><i class="fas fa-desktop"></i> User Interface</a></li>
+                    <li><a href="02_master_agent.html"><i class="fas fa-brain"></i> Master Agent</a></li>
+                    <li><a href="03_llm_client.html"><i class="fas fa-comment-dots"></i> LLM Client</a></li>
+                    <li><a href="04_data_pipeline.html"><i class="fas fa-database"></i> Data Pipeline</a></li>
+                    <li><a href="05_sentiment_analysis.html"><i class="fas fa-smile"></i> Sentiment Analysis</a></li>
+                    <li><a href="06_trend_analysis.html"><i class="fas fa-chart-line"></i> Trend Analysis</a></li>
+                    <li class="active"><a href="07_agent_state.html"><i class="fas fa-toggle-on"></i> Agent State</a></li>
+                    <li><a href="08_prompts.html"><i class="fas fa-quote-left"></i> Prompts</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+            </div>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Chapter 7: Agent State</h1>
+            </header>
+            <div class="content-body">
+                <p>Welcome back to the EggHatch AI tutorial! In the last few chapters, we've explored some key parts of our system:</p>
+                <ul>
+                    <li>The <a href="02_master_agent.html">Master Agent (Orchestrator)</a> acts as the brain, deciding the steps needed to answer your query.</li>
+                    <li>The <a href="03_llm_client.html">LLM Client</a> lets the Master Agent talk to the AI model.</li>
+                    <li>The <a href="04_data_pipeline.html">Data Pipeline</a> prepares the data for analysis.</li>
+                    <li>Specialized agents like the <a href="05_sentiment_analysis.html">Sentiment Analysis Agent</a> and <a href="06_trend_analysis.html">Trend Analysis Agent</a> perform specific analysis tasks using that data.</li>
+                </ul>
+
+                <p>As the <a href="02_master_agent.html">Master Agent (Orchestrator)</a> guides your request through these different components and steps, a lot of information is generated: your original question, extracted details (like budget), results from the analysis agents (like trending topics), and the final answer being put together.</p>
+
+                <p>Where does all this information go? How do the different steps know what the previous steps found? This is where the <strong>Agent State</strong> comes in.</p>
+
+                <h2>What is the Agent State?</h2>
+
+                <div class="info-box">
+                    <p>Imagine the Agent State is a <strong>shared notebook</strong> or a <strong>digital whiteboard</strong> that travels with your query as it's processed by the <a href="02_master_agent.html">Master Agent (Orchestrator)</a>.</p>
+                </div>
+
+                <p>When your query starts its journey:</p>
+
+                <ol>
+                    <li>The <strong>Agent State</strong> starts as a blank page.</li>
+                    <li>As each step of processing happens, information is written into this state.</li>
+                    <li>Each component can read what previous components have written.</li>
+                    <li>The final response is constructed using all the information collected in the state.</li>
+                </ol>
+
+                <p>This shared state is crucial because it allows information to flow between different parts of the system without each part needing to know exactly how the others work.</p>
+
+                <h2>How the Agent State Works</h2>
+
+                <p>The Agent State in EggHatch AI follows a structured approach to maintain context throughout a conversation:</p>
+
+                <div class="workflow-diagram">
+                    <img src="agent_state_workflow.svg" alt="Agent State Workflow" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x250?text=Agent+State+Workflow'">
+                </div>
+
+                <h2>Key Components of the Agent State</h2>
+
+                <p>The Agent State manages several types of information:</p>
+
+                <div class="component-grid">
+                    <div class="component-card">
+                        <i class="fas fa-question-circle"></i>
+                        <h3>User Query</h3>
+                        <p>The original question and any follow-up questions</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-filter"></i>
+                        <h3>Extracted Parameters</h3>
+                        <p>Budget, preferences, and other details extracted from queries</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-search"></i>
+                        <h3>Search Results</h3>
+                        <p>Products and information retrieved from the database</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Analysis Results</h3>
+                        <p>Outputs from sentiment and trend analysis</p>
+                    </div>
+                </div>
+
+                <h2>The Agent State Implementation</h2>
+
+                <p>Let's look at a simplified version of the Agent State code:</p>
+
+                <div class="code-block">
+                    <pre><code>
+class AgentState:
+    def __init__(self, user_id=None, conversation_id=None):
+        # Unique identifiers
+        self.user_id = user_id or str(uuid.uuid4())
+        self.conversation_id = conversation_id or str(uuid.uuid4())
+        self.created_at = datetime.datetime.now().isoformat()
+        
+        # Core state components
+        self.user_query = {
+            "original_query": None,
+            "current_query": None,
+            "query_history": []
+        }
+        
+        self.extracted_parameters = {
+            "budget": None,
+            "preferences": {},
+            "constraints": {},
+            "product_type": None
+        }
+        
+        self.search_results = {
+            "products": [],
+            "reviews": [],
+            "last_search_params": {}
+        }
+        
+        self.analysis_results = {
+            "sentiment": {},
+            "trends": {},
+            "recommendations": []
+        }
+        
+        self.conversation_context = {
+            "current_step": "initial",
+            "previous_step": None,
+            "next_step": None,
+            "conversation_history": []
+        }
+        
+        # For tracking changes to the state
+        self.state_history = []
+        self._save_state_snapshot()
+    
+    def update_user_query(self, query):
+        """Update the user query in the state"""
+        if self.user_query["original_query"] is None:
+            self.user_query["original_query"] = query
+            
+        # Add previous query to history
+        if self.user_query["current_query"]:
+            self.user_query["query_history"].append(self.user_query["current_query"])
+            
+        self.user_query["current_query"] = query
+        self._save_state_snapshot()
+        
+        return self
+    
+    def update_extracted_parameters(self, parameters):
+        """Update extracted parameters in the state"""
+        for key, value in parameters.items():
+            if key == "preferences" or key == "constraints":
+                # Merge dictionaries for these fields
+                self.extracted_parameters[key].update(value)
+            else:
+                # Direct assignment for other fields
+                self.extracted_parameters[key] = value
+        
+        self._save_state_snapshot()
+        return self
+    
+    def update_search_results(self, results, search_params=None):
+        """Update search results in the state"""
+        if "products" in results:
+            self.search_results["products"] = results["products"]
+            
+        if "reviews" in results:
+            self.search_results["reviews"] = results["reviews"]
+            
+        if search_params:
+            self.search_results["last_search_params"] = search_params
+            
+        self._save_state_snapshot()
+        return self
+    
+    def update_analysis_results(self, analysis_type, results):
+        """Update analysis results in the state"""
+        self.analysis_results[analysis_type] = results
+        self._save_state_snapshot()
+        return self
+    
+    def add_to_conversation(self, role, message):
+        """Add a message to the conversation history"""
+        self.conversation_context["conversation_history"].append({
+            "role": role,  # 'user', 'system', or 'assistant'
+            "message": message,
+            "timestamp": datetime.datetime.now().isoformat()
+        })
+        
+        self._save_state_snapshot()
+        return self
+    
+    def update_conversation_step(self, current_step, next_step=None):
+        """Update the current step in the conversation flow"""
+        self.conversation_context["previous_step"] = self.conversation_context["current_step"]
+        self.conversation_context["current_step"] = current_step
+        self.conversation_context["next_step"] = next_step
+        
+        self._save_state_snapshot()
+        return self
+    
+    def _save_state_snapshot(self):
+        """Save a snapshot of the current state for history tracking"""
+        # Create a deep copy of the current state (excluding history itself)
+        current_state = copy.deepcopy(self.__dict__)
+        del current_state["state_history"]
+        
+        # Add timestamp
+        snapshot = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "state": current_state
+        }
+        
+        self.state_history.append(snapshot)
+        
+        # Limit history length to prevent memory issues
+        if len(self.state_history) > 50:
+            self.state_history = self.state_history[-50:]
+    
+    def get_full_state(self):
+        """Get the complete current state"""
+        return {
+            "user_id": self.user_id,
+            "conversation_id": self.conversation_id,
+            "created_at": self.created_at,
+            "user_query": self.user_query,
+            "extracted_parameters": self.extracted_parameters,
+            "search_results": self.search_results,
+            "analysis_results": self.analysis_results,
+            "conversation_context": self.conversation_context
+        }
+    
+    def get_state_for_prompt(self):
+        """
+        Get a formatted version of the state suitable for inclusion in prompts
+        This is a simplified version with the most relevant information
+        """
+        # Format the extracted parameters
+        formatted_parameters = []
+        for key, value in self.extracted_parameters.items():
+            if value:
+                if isinstance(value, dict) and value:
+                    formatted_parameters.append(f"{key.upper()}:")
+                    for subkey, subvalue in value.items():
+                        formatted_parameters.append(f"  - {subkey}: {subvalue}")
+                else:
+                    formatted_parameters.append(f"{key.upper()}: {value}")
+        
+        # Format the search results
+        product_count = len(self.search_results.get("products", []))
+        review_count = len(self.search_results.get("reviews", []))
+        
+        # Format the analysis results
+        sentiment_summary = "Not available"
+        if self.analysis_results.get("sentiment"):
+            sentiment = self.analysis_results["sentiment"]
+            if "overall_sentiment" in sentiment:
+                sentiment_summary = f"{sentiment['overall_sentiment']} (score: {sentiment.get('average_score', 0):.2f})"
+        
+        trend_summary = "Not available"
+        if self.analysis_results.get("trends"):
+            trends = self.analysis_results["trends"].get("topics", {})
+            top_trends = sorted(trends.items(), key=lambda x: x[1].get("count", 0), reverse=True)[:3]
+            if top_trends:
+                trend_summary = ", ".join([f"{topic} ({data.get('sentiment', 'neutral')})" for topic, data in top_trends])
+        
+        # Build the formatted state
+        formatted_state = [
+            "CURRENT STATE:",
+            f"ORIGINAL QUERY: {self.user_query.get('original_query', 'None')}",
+            f"CURRENT QUERY: {self.user_query.get('current_query', 'None')}",
+            "",
+            "EXTRACTED PARAMETERS:",
+            *formatted_parameters,
+            "",
+            "SEARCH RESULTS:",
+            f"- Found {product_count} products matching criteria",
+            f"- Analyzed {review_count} customer reviews",
+            "",
+            "ANALYSIS:",
+            f"- Overall Sentiment: {sentiment_summary}",
+            f"- Top Trends: {trend_summary}",
+            "",
+            f"CURRENT STEP: {self.conversation_context.get('current_step', 'initial')}"
+        ]
+        
+        return "\n".join(formatted_state)
+    
+    def save_to_file(self, file_path=None):
+        """Save the current state to a JSON file"""
+        if not file_path:
+            file_path = f"state_{self.conversation_id}.json"
+            
+        try:
+            with open(file_path, 'w') as f:
+                json.dump(self.get_full_state(), f, indent=2)
+            return True
+        except Exception as e:
+            print(f"Error saving state to file: {str(e)}")
+            return False
+    
+    @classmethod
+    def load_from_file(cls, file_path):
+        """Load a state from a JSON file"""
+        try:
+            with open(file_path, 'r') as f:
+                state_data = json.load(f)
+                
+            # Create a new state object
+            state = cls(user_id=state_data.get("user_id"), 
+                       conversation_id=state_data.get("conversation_id"))
+            
+            # Update the state with loaded data
+            state.user_query = state_data.get("user_query", state.user_query)
+            state.extracted_parameters = state_data.get("extracted_parameters", state.extracted_parameters)
+            state.search_results = state_data.get("search_results", state.search_results)
+            state.analysis_results = state_data.get("analysis_results", state.analysis_results)
+            state.conversation_context = state_data.get("conversation_context", state.conversation_context)
+            state.created_at = state_data.get("created_at", state.created_at)
+            
+            return state
+        except Exception as e:
+            print(f"Error loading state from file: {str(e)}")
+            return None
+                    </code></pre>
+                </div>
+
+                <h2>Key Features of the Agent State</h2>
+
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <i class="fas fa-history"></i>
+                        <h3>State History</h3>
+                        <p>Tracks changes to the state over time</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>Data Flow</h3>
+                        <p>Facilitates information sharing between components</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-memory"></i>
+                        <h3>Context Retention</h3>
+                        <p>Maintains conversation context across interactions</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-save"></i>
+                        <h3>Persistence</h3>
+                        <p>Can be saved and loaded for long-running conversations</p>
+                    </div>
+                </div>
+
+                <h2>Example: Agent State in Action</h2>
+
+                <p>Let's see how the Agent State evolves during a conversation about gaming laptops:</p>
+
+                <div class="example-box">
+                    <h4>User Query:</h4>
+                    <blockquote>
+                        "I need a gaming laptop under $1500 with good battery life for college."
+                    </blockquote>
+                    
+                    <h4>Agent State After Processing:</h4>
+                    <pre>CURRENT STATE:
+ORIGINAL QUERY: I need a gaming laptop under $1500 with good battery life for college.
+CURRENT QUERY: I need a gaming laptop under $1500 with good battery life for college.
+
+EXTRACTED PARAMETERS:
+BUDGET: 1500
+PREFERENCES:
+  - purpose: gaming
+  - purpose: college
+  - feature: battery life
+PRODUCT_TYPE: laptop
+
+SEARCH RESULTS:
+- Found 12 products matching criteria
+- Analyzed 87 customer reviews
+
+ANALYSIS:
+- Overall Sentiment: mixed (score: 0.25)
+- Top Trends: battery life (negative), performance (positive), portability (positive)
+
+CURRENT STEP: recommend_products</pre>
+                </div>
+
+                <p>This state shows how the system has extracted the budget and preferences, found matching products, analyzed reviews, and is now ready to make recommendations based on all this information.</p>
+
+                <h2>Benefits of the Agent State Approach</h2>
+
+                <p>Using a shared state provides several advantages:</p>
+
+                <ul>
+                    <li><strong>Modularity:</strong> Components can be developed and updated independently</li>
+                    <li><strong>Transparency:</strong> The system's reasoning process is visible and traceable</li>
+                    <li><strong>Flexibility:</strong> New analysis components can be added without changing the core architecture</li>
+                    <li><strong>Persistence:</strong> Conversations can be paused and resumed with full context</li>
+                    <li><strong>Debugging:</strong> Developers can inspect the state at any point to understand system behavior</li>
+                </ul>
+
+                <h2>Next Steps</h2>
+
+                <p>Now that you understand how the Agent State maintains context throughout a conversation, let's move on to <a href="08_prompts.html">Chapter 8: Prompts</a>, where we'll explore how EggHatch AI communicates with the language model to get the best results.</p>
+            </div>
+            <footer>
+                <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" fill="#2c3e50">EggHatch-AI Architecture</text>
+  
+  <!-- User Interface Box -->
+  <rect x="350" y="80" width="150" height="60" rx="5" ry="5" fill="#4a6baf" opacity="0.8"/>
+  <text x="425" y="115" font-family="Arial" font-size="16" text-anchor="middle" fill="white">User Interface</text>
+  
+  <!-- Master Agent Box -->
+  <rect x="350" y="200" width="150" height="60" rx="5" ry="5" fill="#2c3e50" opacity="0.9"/>
+  <text x="425" y="235" font-family="Arial" font-size="16" text-anchor="middle" fill="white">Master Agent</text>
+  
+  <!-- LLM Client Box -->
+  <rect x="150" y="320" width="150" height="60" rx="5" ry="5" fill="#3498db" opacity="0.8"/>
+  <text x="225" y="355" font-family="Arial" font-size="16" text-anchor="middle" fill="white">LLM Client</text>
+  
+  <!-- Data Pipeline Box -->
+  <rect x="350" y="320" width="150" height="60" rx="5" ry="5" fill="#e74c3c" opacity="0.8"/>
+  <text x="425" y="355" font-family="Arial" font-size="16" text-anchor="middle" fill="white">Data Pipeline</text>
+  
+  <!-- Sentiment Analysis Box -->
+  <rect x="550" y="260" width="150" height="60" rx="5" ry="5" fill="#2ecc71" opacity="0.8"/>
+  <text x="625" y="295" font-family="Arial" font-size="14" text-anchor="middle" fill="white">Sentiment Analysis</text>
+  
+  <!-- Trend Analysis Box -->
+  <rect x="550" y="380" width="150" height="60" rx="5" ry="5" fill="#f39c12" opacity="0.8"/>
+  <text x="625" y="415" font-family="Arial" font-size="14" text-anchor="middle" fill="white">Trend Analysis</text>
+  
+  <!-- Connector Lines -->
+  <!-- UI to Master Agent -->
+  <line x1="425" y1="140" x2="425" y2="200" stroke="#666" stroke-width="2"/>
+  <polygon points="425,200 420,190 430,190" fill="#666"/>
+  
+  <!-- Master Agent to LLM Client -->
+  <line x1="350" y1="230" x2="225" y2="320" stroke="#666" stroke-width="2"/>
+  <polygon points="225,320 220,310 230,310" fill="#666"/>
+  
+  <!-- Master Agent to Data Pipeline -->
+  <line x1="425" y1="260" x2="425" y2="320" stroke="#666" stroke-width="2"/>
+  <polygon points="425,320 420,310 430,310" fill="#666"/>
+  
+  <!-- Master Agent to Sentiment Analysis -->
+  <line x1="500" y1="230" x2="550" y2="290" stroke="#666" stroke-width="2"/>
+  <polygon points="550,290 540,285 545,275" fill="#666"/>
+  
+  <!-- Master Agent to Trend Analysis -->
+  <line x1="500" y1="230" x2="625" y2="380" stroke="#666" stroke-width="2"/>
+  <polygon points="625,380 615,375 620,365" fill="#666"/>
+  
+  <!-- Data Pipeline to Sentiment Analysis -->
+  <line x1="500" y1="350" x2="550" y2="320" stroke="#666" stroke-width="2"/>
+  <polygon points="550,320 540,325 545,315" fill="#666"/>
+  
+  <!-- Data Pipeline to Trend Analysis -->
+  <line x1="500" y1="350" x2="550" y2="410" stroke="#666" stroke-width="2"/>
+  <polygon points="550,410 540,405 545,415" fill="#666"/>
+  
+  <!-- Legend -->
+  <rect x="50" y="430" width="700" height="40" rx="5" ry="5" fill="white" stroke="#ddd"/>
+  <text x="400" y="455" font-family="Arial" font-size="14" text-anchor="middle" fill="#666">Data Flow Direction</text>
+  <line x1="550" y1="455" x2="580" y2="455" stroke="#666" stroke-width="2"/>
+  <polygon points="580,455 570,450 570,460" fill="#666"/>
+</svg>

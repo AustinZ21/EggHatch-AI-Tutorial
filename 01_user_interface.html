@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Interface (Dashboard) - EggHatch-AI Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EggHatch-AI</h2>
+                <p>Tutorial</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li class="active"><a href="01_user_interface.html"><i class="fas fa-desktop"></i> User Interface</a></li>
+                    <li><a href="02_master_agent.html"><i class="fas fa-brain"></i> Master Agent</a></li>
+                    <li><a href="03_llm_client.html"><i class="fas fa-comment-dots"></i> LLM Client</a></li>
+                    <li><a href="04_data_pipeline.html"><i class="fas fa-database"></i> Data Pipeline</a></li>
+                    <li><a href="05_sentiment_analysis.html"><i class="fas fa-smile"></i> Sentiment Analysis</a></li>
+                    <li><a href="06_trend_analysis.html"><i class="fas fa-chart-line"></i> Trend Analysis</a></li>
+                    <li><a href="07_agent_state.html"><i class="fas fa-toggle-on"></i> Agent State</a></li>
+                    <li><a href="08_prompts.html"><i class="fas fa-quote-left"></i> Prompts</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+            </div>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Chapter 1: User Interface (Dashboard)</h1>
+            </header>
+            <div class="content-body">
+                <p>Welcome to the first chapter of the EggHatch AI tutorial! We're going to start with the part you'll see and interact with directly: the User Interface, also called the Dashboard.</p>
+
+                <p>Think of the User Interface (UI) as the "face" of our EggHatch AI project. It's the part where <em>you</em>, the user, can talk to the AI and see its responses.</p>
+
+                <h2>Why Do We Need a User Interface?</h2>
+
+                <p>Imagine you have a super-smart robot (that's EggHatch AI!). How do you tell it what you want? How does it tell you its answer? You need a way to communicate! The User Interface is that communication channel.</p>
+
+                <div class="info-box">
+                    <strong>Our main use case:</strong> You want to ask EggHatch AI a question about PC parts, like "What's a good gaming laptop for under $1500?". The UI makes this possible.
+                </div>
+
+                <p>Without a UI, all the clever parts of EggHatch AI would just be code running in the background, with no way for a person to use them. The UI takes your question and shows you the answer, making the whole system useful!</p>
+
+                <h2>What Does the User Interface Do?</h2>
+
+                <p>The EggHatch AI User Interface has several important jobs:</p>
+
+                <ul>
+                    <li><strong>Takes your input:</strong> It provides a text box where you can type your questions about PC parts and tech gear.</li>
+                    <li><strong>Displays responses:</strong> It shows you the AI's answers in a clear, readable format.</li>
+                    <li><strong>Shows conversation history:</strong> It keeps track of your back-and-forth with the AI, so you can refer back to previous questions and answers.</li>
+                    <li><strong>Provides visual context:</strong> It may include images or charts to help explain recommendations.</li>
+                </ul>
+
+                <h2>The Dashboard Implementation</h2>
+
+                <p>The EggHatch AI Dashboard is implemented using a web application framework. Let's look at the key components:</p>
+
+                <div class="code-block">
+                    <pre><code>
+# Main dashboard application file
+from app.master_agent import MasterAgent
+import streamlit as st
+
+# Initialize the master agent
+master_agent = MasterAgent()
+
+# Set up the Streamlit UI
+st.title("EggHatch AI - Your Tech Shopping Assistant")
+
+# User input section
+user_query = st.text_input("Ask me about PC parts and tech gear:")
+
+if user_query:
+    # Process the query through the master agent
+    response = master_agent.process_query(user_query)
+    
+    # Display the response
+    st.write(response)
+                    </code></pre>
+                </div>
+
+                <p>This simplified code snippet shows how the dashboard connects user input to the Master Agent, which orchestrates the AI's response process.</p>
+
+                <h2>Key Design Principles</h2>
+
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <i class="fas fa-user-friends"></i>
+                        <h3>User-Friendly</h3>
+                        <p>Simple interface that anyone can use without technical knowledge</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Responsive</h3>
+                        <p>Quick feedback so users know their request is being processed</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-info-circle"></i>
+                        <h3>Informative</h3>
+                        <p>Clear presentation of complex data and recommendations</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>Accessible</h3>
+                        <p>Works well on different devices and screen sizes</p>
+                    </div>
+                </div>
+
+                <h2>Next Steps</h2>
+
+                <p>Now that you understand the User Interface, let's move on to <a href="02_master_agent.html">Chapter 2: Master Agent (Orchestrator)</a>, where we'll explore the "brain" behind EggHatch AI that coordinates all the specialized agents.</p>
+            </div>
+            <footer>
+                <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

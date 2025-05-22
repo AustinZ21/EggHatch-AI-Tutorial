@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Agent (Orchestrator) - EggHatch-AI Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EggHatch-AI</h2>
+                <p>Tutorial</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="01_user_interface.html"><i class="fas fa-desktop"></i> User Interface</a></li>
+                    <li class="active"><a href="02_master_agent.html"><i class="fas fa-brain"></i> Master Agent</a></li>
+                    <li><a href="03_llm_client.html"><i class="fas fa-comment-dots"></i> LLM Client</a></li>
+                    <li><a href="04_data_pipeline.html"><i class="fas fa-database"></i> Data Pipeline</a></li>
+                    <li><a href="05_sentiment_analysis.html"><i class="fas fa-smile"></i> Sentiment Analysis</a></li>
+                    <li><a href="06_trend_analysis.html"><i class="fas fa-chart-line"></i> Trend Analysis</a></li>
+                    <li><a href="07_agent_state.html"><i class="fas fa-toggle-on"></i> Agent State</a></li>
+                    <li><a href="08_prompts.html"><i class="fas fa-quote-left"></i> Prompts</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+            </div>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Chapter 2: Master Agent (Orchestrator)</h1>
+            </header>
+            <div class="content-body">
+                <p>Welcome back to the EggHatch AI tutorial! In the last chapter, <a href="01_user_interface.html">User Interface (Dashboard)</a>, we saw how you, the user, interact with EggHatch AI – typing questions into the Dashboard and seeing the answers appear. The User Interface is like the friendly front door.</p>
+
+                <p>But once you've handed your question through that front door, where does it go? And who figures out what to <em>do</em> with it? That's the job of the <strong>Master Agent</strong>, also known as the <strong>Orchestrator</strong>.</p>
+
+                <h2>What is the Master Agent?</h2>
+
+                <p>Think of the Master Agent as the <strong>brain</strong> or the <strong>project manager</strong> of EggHatch AI. When a question comes in from the User Interface, the Master Agent takes charge. It's responsible for:</p>
+
+                <ol>
+                    <li><strong>Understanding</strong> exactly what you're asking.</li>
+                    <li>Figuring out the best <strong>plan</strong> to answer your question.</li>
+                    <li>Sending different parts of the problem to the right <strong>specialist agents</strong> (like an agent that knows about trends or one that analyzes feelings).</li>
+                    <li>Making sure those specialist agents do their jobs in the correct <strong>order</strong>.</li>
+                    <li>Taking all the results from the specialists and <strong>combining</strong> them into one helpful final answer.</li>
+                    <li>Sending that final answer back to the User Interface to show you.</li>
+                </ol>
+
+                <div class="info-box">
+                    <p><strong>Think of it like this:</strong> If EggHatch AI were a restaurant, the User Interface would be the waiter taking your order, and the Master Agent would be the head chef who reads the order, decides which cooks should prepare which parts of the meal, and makes sure everything comes together on your plate at the right time.</p>
+                </div>
+
+                <h2>How Does the Master Agent Work?</h2>
+
+                <p>The Master Agent is built using a combination of techniques, but its core functionality relies on a Large Language Model (LLM) to understand and process natural language. Let's look at a simplified version of how it works:</p>
+
+                <div class="workflow-diagram">
+                    <img src="master_agent_workflow.svg" alt="Master Agent Workflow" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x300?text=Master+Agent+Workflow'">
+                </div>
+
+                <h3>The Master Agent's Key Functions</h3>
+
+                <div class="component-grid">
+                    <div class="component-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <h4>Query Understanding</h4>
+                        <p>Interprets what the user is asking for and identifies the intent</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-sitemap"></i>
+                        <h4>Task Planning</h4>
+                        <p>Breaks down complex queries into manageable sub-tasks</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h4>Agent Delegation</h4>
+                        <p>Assigns sub-tasks to specialized agents with the right capabilities</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-sync-alt"></i>
+                        <h4>State Management</h4>
+                        <p>Keeps track of the conversation context and progress of tasks</p>
+                    </div>
+                </div>
+
+                <h2>The Master Agent Implementation</h2>
+
+                <p>Let's look at a simplified version of the Master Agent's code to understand how it works:</p>
+
+                <div class="code-block">
+                    <pre><code>
+class MasterAgent:
+    def __init__(self):
+        # Initialize connections to specialized agents
+        self.llm_client = LLMClient()
+        self.trend_analysis_agent = TrendAnalysisAgent()
+        self.sentiment_analysis_agent = SentimentAnalysisAgent()
+        self.product_knowledge_agent = ProductKnowledgeAgent()
+        self.pricing_availability_agent = PricingAvailabilityAgent()
+        self.build_recommendation_agent = BuildRecommendationAgent()
+        
+        # Initialize state management
+        self.state = AgentState()
+        
+        # Load prompt templates
+        self.prompts = Prompts()
+    
+    def process_query(self, user_query):
+        """Main entry point for processing user queries"""
+        # Update conversation state
+        self.state.add_user_message(user_query)
+        
+        # Understand the query using LLM
+        query_analysis = self.llm_client.analyze_query(
+            self.prompts.get_prompt("query_understanding"), 
+            user_query
+        )
+        
+        # Plan the response strategy
+        plan = self._create_plan(query_analysis)
+        
+        # Execute the plan by calling appropriate agents
+        results = self._execute_plan(plan)
+        
+        # Synthesize the final response
+        final_response = self._synthesize_response(results, query_analysis)
+        
+        # Update state with response
+        self.state.add_agent_message(final_response)
+        
+        return final_response
+                    </code></pre>
+                </div>
+
+                <p>This simplified code shows how the Master Agent orchestrates the entire process, from receiving a query to returning a final response.</p>
+
+                <h2>Key Design Principles</h2>
+
+                <p>The Master Agent follows several important design principles:</p>
+
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <h3>Modularity</h3>
+                        <p>Uses specialized agents that can be improved independently</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-history"></i>
+                        <h3>Stateful</h3>
+                        <p>Maintains conversation context for more natural interactions</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                        <h3>Extensibility</h3>
+                        <p>New capabilities can be added by creating new specialized agents</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Robustness</h3>
+                        <p>Can handle unexpected inputs and agent failures gracefully</p>
+                    </div>
+                </div>
+
+                <h2>Next Steps</h2>
+
+                <p>Now that you understand the Master Agent's role as the orchestrator of EggHatch AI, let's move on to <a href="03_llm_client.html">Chapter 3: LLM Client</a>, where we'll explore how EggHatch AI leverages Large Language Models to understand and generate human-like text.</p>
+            </div>
+            <footer>
+                <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

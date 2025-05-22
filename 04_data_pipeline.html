@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Pipeline - EggHatch-AI Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EggHatch-AI</h2>
+                <p>Tutorial</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="01_user_interface.html"><i class="fas fa-desktop"></i> User Interface</a></li>
+                    <li><a href="02_master_agent.html"><i class="fas fa-brain"></i> Master Agent</a></li>
+                    <li><a href="03_llm_client.html"><i class="fas fa-comment-dots"></i> LLM Client</a></li>
+                    <li class="active"><a href="04_data_pipeline.html"><i class="fas fa-database"></i> Data Pipeline</a></li>
+                    <li><a href="05_sentiment_analysis.html"><i class="fas fa-smile"></i> Sentiment Analysis</a></li>
+                    <li><a href="06_trend_analysis.html"><i class="fas fa-chart-line"></i> Trend Analysis</a></li>
+                    <li><a href="07_agent_state.html"><i class="fas fa-toggle-on"></i> Agent State</a></li>
+                    <li><a href="08_prompts.html"><i class="fas fa-quote-left"></i> Prompts</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+            </div>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Chapter 4: Data Pipeline</h1>
+            </header>
+            <div class="content-body">
+                <p>Welcome back to the EggHatch AI tutorial! In the last chapter, <a href="03_llm_client.html">LLM Client</a>, we learned how our system talks to the powerful AI model itself. The LLM Client is the messenger that sends instructions (prompts) and gets text back.</p>
+
+                <p>But what does the AI <em>talk about</em>? For EggHatch AI to give you helpful advice on PC parts and tech, it needs information about products – like laptop specifications, prices, and what real customers think about them. This is where the <strong>Data Pipeline</strong> comes in.</p>
+
+                <h2>What is the Data Pipeline?</h2>
+
+                <div class="info-box">
+                    <p>Imagine the Data Pipeline is like the <strong>prep station in a busy kitchen</strong>. Raw ingredients (our raw data like messy spreadsheets or text files of reviews) arrive here. The kitchen staff (the Data Pipeline) then washes, chops, measures, and prepares everything so it's ready for the chefs (the other agents) to use in their dishes (the final recommendations and analysis).</p>
+                </div>
+
+                <p>Its main job is to take raw, potentially messy data and transform it into a clean, structured format that the rest of the EggHatch AI system can easily understand and work with.</p>
+
+                <h2>Why Do We Need a Data Pipeline?</h2>
+
+                <p>Raw data is rarely perfect. It can have:</p>
+
+                <ul>
+                    <li><strong>Inconsistencies:</strong> Prices might be formatted differently, names might be spelled slightly wrong.</li>
+                    <li><strong>Missing information:</strong> Some products might be missing certain specifications.</li>
+                    <li><strong>Different formats:</strong> Data might come from different sources with different structures.</li>
+                    <li><strong>Irrelevant details:</strong> There might be information we don't need for our analysis.</li>
+                </ul>
+
+                <p>The Data Pipeline solves these problems by:</p>
+
+                <div class="component-grid">
+                    <div class="component-card">
+                        <i class="fas fa-broom"></i>
+                        <h3>Cleaning</h3>
+                        <p>Fixing errors, standardizing formats, and handling missing values</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-filter"></i>
+                        <h3>Filtering</h3>
+                        <p>Removing irrelevant information and focusing on what matters</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-random"></i>
+                        <h3>Transforming</h3>
+                        <p>Converting data into the right structure for analysis</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-box-open"></i>
+                        <h3>Packaging</h3>
+                        <p>Organizing data in a consistent format for other components</p>
+                    </div>
+                </div>
+
+                <h2>How the Data Pipeline Works in EggHatch AI</h2>
+
+                <p>The Data Pipeline in EggHatch AI follows a series of steps to process data:</p>
+
+                <div class="workflow-diagram">
+                    <img src="data_pipeline_workflow.svg" alt="Data Pipeline Workflow" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x250?text=Data+Pipeline+Workflow'">
+                </div>
+
+                <h2>The Data Pipeline Implementation</h2>
+
+                <p>Let's look at a simplified version of the Data Pipeline code:</p>
+
+                <div class="code-block">
+                    <pre><code>
+class DataPipeline:
+    def __init__(self):
+        # Configure data sources
+        self.data_sources = {
+            "products": "data/csv/new_egg_gaming_laptops.csv",
+            "reviews": "data/reviews/"
+        }
+        
+        # Set up data caches
+        self.product_cache = {}
+        self.review_cache = {}
+        
+        # Load initial data
+        self._load_product_data()
+    
+    def _load_product_data(self):
+        """Load product data from CSV file"""
+        try:
+            import pandas as pd
+            
+            # Read CSV file
+            df = pd.read_csv(self.data_sources["products"])
+            
+            # Clean and transform data
+            df = self._clean_product_data(df)
+            
+            # Convert to dictionary format for easy access
+            self.product_cache = df.to_dict(orient='records')
+            
+            print(f"Loaded {len(self.product_cache)} products")
+        except Exception as e:
+            print(f"Error loading product data: {str(e)}")
+    
+    def _clean_product_data(self, df):
+        """Clean and standardize product data"""
+        # Standardize column names
+        df.columns = [col.lower().replace(' ', '_') for col in df.columns]
+        
+        # Handle missing values
+        df = df.fillna({
+            'price': 0,
+            'rating': 0,
+            'num_reviews': 0
+        })
+        
+        # Extract and standardize price
+        df['price'] = df['price'].astype(str).str.replace('$', '').str.replace(',', '')
+        df['price'] = pd.to_numeric(df['price'], errors='coerce')
+        
+        # Other cleaning steps...
+        
+        return df
+    
+    def get_product_by_id(self, product_id):
+        """Retrieve a product by its ID"""
+        for product in self.product_cache:
+            if str(product.get('id')) == str(product_id):
+                return product
+        return None
+    
+    def get_products_by_filter(self, filters=None):
+        """Get products matching certain criteria"""
+        if not filters:
+            return self.product_cache
+            
+        filtered_products = []
+        for product in self.product_cache:
+            matches = True
+            for key, value in filters.items():
+                if key in product:
+                    # Handle range filters (e.g., price_min, price_max)
+                    if key.endswith('_min') and product.get(key[:-4], 0) < value:
+                        matches = False
+                    elif key.endswith('_max') and product.get(key[:-4], 0) > value:
+                        matches = False
+                    # Handle exact matches
+                    elif not key.endswith('_min') and not key.endswith('_max') and product.get(key) != value:
+                        matches = False
+            
+            if matches:
+                filtered_products.append(product)
+                
+        return filtered_products
+    
+    def get_reviews_for_product(self, product_id):
+        """Get all reviews for a specific product"""
+        # Check cache first
+        if product_id in self.review_cache:
+            return self.review_cache[product_id]
+            
+        # Load reviews from file
+        import json
+        import os
+        
+        review_file = os.path.join(self.data_sources["reviews"], f"laptop_{product_id}_reviews.json")
+        
+        if not os.path.exists(review_file):
+            return []
+            
+        try:
+            with open(review_file, 'r') as f:
+                reviews = json.load(f)
+                
+            # Clean and standardize reviews
+            cleaned_reviews = self._clean_reviews(reviews)
+            
+            # Cache for future use
+            self.review_cache[product_id] = cleaned_reviews
+            
+            return cleaned_reviews
+        except Exception as e:
+            print(f"Error loading reviews for product {product_id}: {str(e)}")
+            return []
+                    </code></pre>
+                </div>
+
+                <h2>Key Features of the Data Pipeline</h2>
+
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <i class="fas fa-sync"></i>
+                        <h3>Caching</h3>
+                        <p>Stores processed data in memory for quick access</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-search"></i>
+                        <h3>Filtering</h3>
+                        <p>Provides flexible ways to search for specific products</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-link"></i>
+                        <h3>Relationships</h3>
+                        <p>Connects products with their reviews and other related data</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Error Handling</h3>
+                        <p>Gracefully handles missing files or corrupted data</p>
+                    </div>
+                </div>
+
+                <h2>Data Sources in EggHatch AI</h2>
+
+                <p>EggHatch AI uses several data sources to provide comprehensive information:</p>
+
+                <ul>
+                    <li><strong>Product Specifications:</strong> Details about laptops including processor, memory, storage, graphics, etc.</li>
+                    <li><strong>Pricing Information:</strong> Current and historical prices from retailers</li>
+                    <li><strong>Customer Reviews:</strong> Text reviews and ratings from actual users</li>
+                    <li><strong>Technical Benchmarks:</strong> Performance measurements for different tasks</li>
+                </ul>
+
+                <p>All of this data flows through the Data Pipeline, getting cleaned and organized before being used by the specialized agents for analysis.</p>
+
+                <h2>Next Steps</h2>
+
+                <p>Now that you understand how the Data Pipeline prepares information for analysis, let's move on to <a href="05_sentiment_analysis.html">Chapter 5: Sentiment Analysis Agent</a>, where we'll explore how EggHatch AI understands the emotions and opinions in customer reviews.</p>
+            </div>
+            <footer>
+                <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

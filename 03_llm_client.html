@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Client - EggHatch-AI Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EggHatch-AI</h2>
+                <p>Tutorial</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="01_user_interface.html"><i class="fas fa-desktop"></i> User Interface</a></li>
+                    <li><a href="02_master_agent.html"><i class="fas fa-brain"></i> Master Agent</a></li>
+                    <li class="active"><a href="03_llm_client.html"><i class="fas fa-comment-dots"></i> LLM Client</a></li>
+                    <li><a href="04_data_pipeline.html"><i class="fas fa-database"></i> Data Pipeline</a></li>
+                    <li><a href="05_sentiment_analysis.html"><i class="fas fa-smile"></i> Sentiment Analysis</a></li>
+                    <li><a href="06_trend_analysis.html"><i class="fas fa-chart-line"></i> Trend Analysis</a></li>
+                    <li><a href="07_agent_state.html"><i class="fas fa-toggle-on"></i> Agent State</a></li>
+                    <li><a href="08_prompts.html"><i class="fas fa-quote-left"></i> Prompts</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+            </div>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Chapter 3: LLM Client</h1>
+            </header>
+            <div class="content-body">
+                <p>Welcome back to the EggHatch AI tutorial! In the last chapter, <a href="02_master_agent.html">Master Agent (Orchestrator)</a>, we learned that the Master Agent is the "brain" or "project manager" that takes your question and figures out the steps needed to answer it. It decides <em>what</em> needs to be done.</p>
+
+                <p>But how does the Master Agent actually <em>talk</em> to the AI itself? How does it send those instructions or prompts and get text back? That's where the <strong>LLM Client</strong> comes in.</p>
+
+                <h2>What is the LLM Client?</h2>
+
+                <p>Think of the LLM Client as the <strong>dedicated messenger service</strong> for the EggHatch AI system. Its <em>only</em> job is to handle talking to the <strong>Large Language Model (LLM)</strong>.</p>
+
+                <div class="info-box">
+                    <p>The LLM is the actual AI model (in our case, Gemma running through Ollama) that can understand language, generate text, and perform complex reasoning tasks. It's the expert that provides the raw intelligence.</p>
+                </div>
+
+                <p>The LLM Client is the specialized tool that allows other parts of our system, like the <a href="02_master_agent.html">Master Agent</a>, to send messages (prompts) to the LLM and receive the AI's generated text replies.</p>
+
+                <h2>Why Do We Need an LLM Client?</h2>
+
+                <p>We need the LLM Client because talking to an AI model isn't always as simple as sending a text message. AI models often run as separate services (like Ollama), and interacting with them requires specific technical steps:</p>
+
+                <div class="component-grid">
+                    <div class="component-card">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>API Communication</h3>
+                        <p>Handles the HTTP requests and responses to the LLM service</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-file-code"></i>
+                        <h3>Format Conversion</h3>
+                        <p>Transforms data between our system's format and the LLM's required format</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Error Handling</h3>
+                        <p>Manages connection issues, timeouts, and other potential problems</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h3>Performance Optimization</h3>
+                        <p>Implements caching, retries, and other efficiency improvements</p>
+                    </div>
+                </div>
+
+                <p>By having a dedicated LLM Client, we make it much easier for the rest of our system to use the AI model without worrying about these technical details.</p>
+
+                <h2>How the LLM Client Works</h2>
+
+                <p>The LLM Client in EggHatch AI is designed to be simple but effective. Here's a visual representation of how it works:</p>
+
+                <div class="workflow-diagram">
+                    <img src="llm_client_workflow.svg" alt="LLM Client Workflow" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x250?text=LLM+Client+Workflow'">
+                </div>
+
+                <h2>The LLM Client Implementation</h2>
+
+                <p>Let's look at a simplified version of the LLM Client code:</p>
+
+                <div class="code-block">
+                    <pre><code>
+import requests
+import json
+import os
+import logging
+from datetime import datetime
+
+class LLMClient:
+    def __init__(self):
+        # Configure the LLM endpoint
+        self.base_url = os.getenv("LLM_API_URL", "http://localhost:11434/api")
+        self.model = os.getenv("LLM_MODEL", "gemma")
+        
+        # Set up caching
+        self.cache = {}
+        self.cache_file = "llm_cache.json"
+        self._load_cache()
+        
+        # Configure logging
+        self._setup_logging()
+    
+    def analyze_query(self, prompt_template, user_query):
+        """
+        Send a query to the LLM for analysis
+        """
+        # Format the prompt with the user query
+        prompt = prompt_template.format(user_query=user_query)
+        
+        # Get response from LLM (with caching)
+        return self.generate_text(prompt)
+    
+    def generate_text(self, prompt, use_cache=True):
+        """
+        Generate text from the LLM based on a prompt
+        """
+        # Check cache if enabled
+        if use_cache and prompt in self.cache:
+            self.logger.info(f"Cache hit for prompt: {prompt[:50]}...")
+            return self.cache[prompt]
+        
+        # Prepare the request to the LLM API
+        payload = {
+            "model": self.model,
+            "prompt": prompt,
+            "stream": False
+        }
+        
+        try:
+            # Send request to the LLM API
+            response = requests.post(
+                f"{self.base_url}/generate",
+                headers={"Content-Type": "application/json"},
+                data=json.dumps(payload)
+            )
+            
+            # Check for successful response
+            if response.status_code == 200:
+                result = response.json()
+                generated_text = result.get("response", "")
+                
+                # Update cache
+                if use_cache:
+                    self.cache[prompt] = generated_text
+                    self._save_cache()
+                
+                return generated_text
+            else:
+                self.logger.error(f"LLM API error: {response.status_code} - {response.text}")
+                return "I encountered an error processing your request."
+                
+        except Exception as e:
+            self.logger.error(f"Exception when calling LLM API: {str(e)}")
+            return "I encountered an error processing your request."
+                    </code></pre>
+                </div>
+
+                <h2>Key Features of the LLM Client</h2>
+
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <i class="fas fa-database"></i>
+                        <h3>Caching</h3>
+                        <p>Stores previous responses to avoid unnecessary API calls</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Logging</h3>
+                        <p>Records all interactions for debugging and improvement</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Configuration</h3>
+                        <p>Uses environment variables for flexible deployment</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Handling</h3>
+                        <p>Gracefully manages API failures and exceptions</p>
+                    </div>
+                </div>
+
+                <h2>Benefits of the LLM Client Design</h2>
+
+                <ul>
+                    <li><strong>Abstraction:</strong> Other components don't need to know the details of how to talk to the LLM</li>
+                    <li><strong>Consistency:</strong> All LLM interactions follow the same pattern</li>
+                    <li><strong>Maintainability:</strong> Changes to the LLM API only require updates in one place</li>
+                    <li><strong>Performance:</strong> Caching and other optimizations improve response time</li>
+                    <li><strong>Monitoring:</strong> Centralized logging makes it easier to track LLM usage</li>
+                </ul>
+
+                <h2>Next Steps</h2>
+
+                <p>Now that you understand how the LLM Client enables communication with the AI model, let's move on to <a href="04_data_pipeline.html">Chapter 4: Data Pipeline</a>, where we'll explore how EggHatch AI manages the flow of data between different components.</p>
+            </div>
+            <footer>
+                <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

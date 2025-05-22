@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis Agent - EggHatch-AI Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EggHatch-AI</h2>
+                <p>Tutorial</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="01_user_interface.html"><i class="fas fa-desktop"></i> User Interface</a></li>
+                    <li><a href="02_master_agent.html"><i class="fas fa-brain"></i> Master Agent</a></li>
+                    <li><a href="03_llm_client.html"><i class="fas fa-comment-dots"></i> LLM Client</a></li>
+                    <li><a href="04_data_pipeline.html"><i class="fas fa-database"></i> Data Pipeline</a></li>
+                    <li class="active"><a href="05_sentiment_analysis.html"><i class="fas fa-smile"></i> Sentiment Analysis</a></li>
+                    <li><a href="06_trend_analysis.html"><i class="fas fa-chart-line"></i> Trend Analysis</a></li>
+                    <li><a href="07_agent_state.html"><i class="fas fa-toggle-on"></i> Agent State</a></li>
+                    <li><a href="08_prompts.html"><i class="fas fa-quote-left"></i> Prompts</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/AustinZ21/EggHatch-AI" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+            </div>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Chapter 5: Sentiment Analysis Agent</h1>
+            </header>
+            <div class="content-body">
+                <p>Welcome back to the EggHatch AI tutorial! In the last chapter, <a href="04_data_pipeline.html">Data Pipeline</a>, we learned how our system gathers, cleans, and prepares raw data, like customer reviews, making it ready for analysis.</p>
+
+                <p>Now that we have this clean data, what can we <em>do</em> with it? One very useful thing is to understand how people <em>feel</em> about the products they are reviewing. This is where the <strong>Sentiment Analysis Agent</strong> comes in.</p>
+
+                <h2>What is the Sentiment Analysis Agent?</h2>
+
+                <div class="info-box">
+                    <p>Think of the Sentiment Analysis Agent as a <strong>mood ring for text</strong>. Its special job is to read a piece of text, like a customer review, and tell us the overall feeling or <strong>sentiment</strong> expressed in that text.</p>
+                </div>
+
+                <p>Is the reviewer expressing a:</p>
+
+                <ul>
+                    <li><strong>Positive</strong> feeling? (e.g., "This laptop is amazing!")</li>
+                    <li><strong>Negative</strong> feeling? (e.g., "Battery life is terrible.")</li>
+                    <li><strong>Neutral</strong> feeling? (e.g., "The box arrived today.")</li>
+                </ul>
+
+                <p>This agent uses a special type of AI model (a pre-trained language model) that's good at understanding the nuances of human language to figure this out. It also has a simple backup plan (a rule-based fallback) in case the main AI model isn't available.</p>
+
+                <p>Knowing the sentiment of reviews is incredibly helpful! It tells us whether customers are generally happy or unhappy with a product or a specific feature.</p>
+
+                <h2>How the Sentiment Analysis Agent Works</h2>
+
+                <p>The Sentiment Analysis Agent in EggHatch AI follows a multi-step process to analyze sentiment:</p>
+
+                <div class="workflow-diagram">
+                    <img src="sentiment_analysis_workflow.svg" alt="Sentiment Analysis Workflow" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x250?text=Sentiment+Analysis+Workflow'">
+                </div>
+
+                <h2>Sentiment Analysis Techniques</h2>
+
+                <p>The Sentiment Analysis Agent uses several techniques to understand the sentiment in text:</p>
+
+                <div class="component-grid">
+                    <div class="component-card">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Polarity Detection</h3>
+                        <p>Determining if text is positive, negative, or neutral</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-thermometer-half"></i>
+                        <h3>Intensity Analysis</h3>
+                        <p>Measuring how strong the sentiment is (slightly positive vs. extremely positive)</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <h3>Aspect-Based Analysis</h3>
+                        <p>Identifying sentiment toward specific features (e.g., battery life, display quality)</p>
+                    </div>
+                    <div class="component-card">
+                        <i class="fas fa-language"></i>
+                        <h3>Contextual Understanding</h3>
+                        <p>Recognizing sarcasm, idioms, and other complex language patterns</p>
+                    </div>
+                </div>
+
+                <h2>The Sentiment Analysis Implementation</h2>
+
+                <p>Let's look at a simplified version of the Sentiment Analysis Agent code:</p>
+
+                <div class="code-block">
+                    <pre><code>
+class SentimentAnalysisAgent:
+    def __init__(self):
+        # Initialize the LLM client for advanced sentiment analysis
+        self.llm_client = LLMClient()
+        
+        # Load sentiment lexicon for rule-based fallback
+        self.positive_words = self._load_lexicon("data/lexicons/positive_words.txt")
+        self.negative_words = self._load_lexicon("data/lexicons/negative_words.txt")
+        
+        # Load prompts for LLM
+        self.prompts = Prompts()
+    
+    def _load_lexicon(self, file_path):
+        """Load a lexicon of sentiment words from a file"""
+        try:
+            with open(file_path, 'r') as f:
+                return set(line.strip().lower() for line in f if line.strip())
+        except Exception as e:
+            print(f"Error loading lexicon {file_path}: {str(e)}")
+            return set()
+    
+    def analyze_sentiment(self, text, use_llm=True):
+        """
+        Analyze the sentiment of a piece of text
+        Returns a dictionary with sentiment information
+        """
+        if use_llm:
+            try:
+                # Use LLM for more nuanced sentiment analysis
+                return self._analyze_with_llm(text)
+            except Exception as e:
+                print(f"LLM sentiment analysis failed: {str(e)}")
+                # Fall back to rule-based approach
+                return self._analyze_with_rules(text)
+        else:
+            # Use simpler rule-based approach
+            return self._analyze_with_rules(text)
+    
+    def _analyze_with_llm(self, text):
+        """Use LLM to analyze sentiment with more nuance"""
+        prompt = self.prompts.get_prompt("sentiment_analysis").format(text=text)
+        response = self.llm_client.generate_text(prompt)
+        
+        try:
+            # Parse the LLM response
+            import json
+            result = json.loads(response)
+            
+            # Ensure the result has the expected format
+            if not all(k in result for k in ['polarity', 'score', 'aspects']):
+                raise ValueError("LLM response missing required fields")
+                
+            return result
+        except Exception as e:
+            print(f"Error parsing LLM sentiment response: {str(e)}")
+            # Fall back to rule-based approach
+            return self._analyze_with_rules(text)
+    
+    def _analyze_with_rules(self, text):
+        """
+        Use a simple rule-based approach for sentiment analysis
+        This is a fallback when the LLM approach fails
+        """
+        # Preprocess text
+        words = text.lower().split()
+        
+        # Count positive and negative words
+        positive_count = sum(1 for word in words if word in self.positive_words)
+        negative_count = sum(1 for word in words if word in self.negative_words)
+        
+        # Calculate overall sentiment
+        total_sentiment_words = positive_count + negative_count
+        if total_sentiment_words == 0:
+            polarity = "neutral"
+            score = 0.0
+        else:
+            score = (positive_count - negative_count) / total_sentiment_words
+            if score > 0.1:
+                polarity = "positive"
+            elif score < -0.1:
+                polarity = "negative"
+            else:
+                polarity = "neutral"
+        
+        # Return a simplified result
+        return {
+            "polarity": polarity,
+            "score": score,
+            "aspects": {}  # No aspect-based analysis in the rule-based approach
+        }
+    
+    def analyze_reviews(self, reviews):
+        """
+        Analyze sentiment for a list of reviews
+        Returns aggregated sentiment statistics
+        """
+        if not reviews:
+            return {
+                "overall_sentiment": "neutral",
+                "average_score": 0.0,
+                "review_count": 0,
+                "positive_count": 0,
+                "negative_count": 0,
+                "neutral_count": 0,
+                "aspect_sentiments": {}
+            }
+        
+        # Analyze each review
+        sentiments = [self.analyze_sentiment(review["text"]) for review in reviews]
+        
+        # Count sentiments by polarity
+        positive_count = sum(1 for s in sentiments if s["polarity"] == "positive")
+        negative_count = sum(1 for s in sentiments if s["polarity"] == "negative")
+        neutral_count = sum(1 for s in sentiments if s["polarity"] == "neutral")
+        
+        # Calculate average sentiment score
+        average_score = sum(s["score"] for s in sentiments) / len(sentiments)
+        
+        # Determine overall sentiment
+        if positive_count > negative_count and positive_count > neutral_count:
+            overall_sentiment = "positive"
+        elif negative_count > positive_count and negative_count > neutral_count:
+            overall_sentiment = "negative"
+        else:
+            overall_sentiment = "neutral"
+        
+        # Aggregate aspect-based sentiments
+        aspect_sentiments = {}
+        for sentiment in sentiments:
+            for aspect, aspect_data in sentiment.get("aspects", {}).items():
+                if aspect not in aspect_sentiments:
+                    aspect_sentiments[aspect] = {
+                        "mentions": 0,
+                        "positive": 0,
+                        "negative": 0,
+                        "neutral": 0,
+                        "average_score": 0.0
+                    }
+                
+                aspect_sentiments[aspect]["mentions"] += 1
+                aspect_sentiments[aspect][aspect_data["polarity"]] += 1
+                aspect_sentiments[aspect]["average_score"] += aspect_data["score"]
+        
+        # Calculate averages for aspects
+        for aspect, data in aspect_sentiments.items():
+            if data["mentions"] > 0:
+                data["average_score"] /= data["mentions"]
+        
+        return {
+            "overall_sentiment": overall_sentiment,
+            "average_score": average_score,
+            "review_count": len(reviews),
+            "positive_count": positive_count,
+            "negative_count": negative_count,
+            "neutral_count": neutral_count,
+            "aspect_sentiments": aspect_sentiments
+        }
+                    </code></pre>
+                </div>
+
+                <h2>Key Features of the Sentiment Analysis Agent</h2>
+
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <i class="fas fa-robot"></i>
+                        <h3>LLM-Powered</h3>
+                        <p>Uses advanced language models for nuanced understanding</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-life-ring"></i>
+                        <h3>Fallback System</h3>
+                        <p>Has a simpler rule-based approach as backup</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-microscope"></i>
+                        <h3>Aspect Analysis</h3>
+                        <p>Identifies sentiment for specific product features</p>
+                    </div>
+                    <div class="principle-card">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Aggregation</h3>
+                        <p>Combines multiple reviews for overall product sentiment</p>
+                    </div>
+                </div>
+
+                <h2>Example: Sentiment Analysis in Action</h2>
+
+                <p>Let's see how the Sentiment Analysis Agent would process a real customer review:</p>
+
+                <div class="example-box">
+                    <h4>Customer Review:</h4>
+                    <blockquote>
+                        "I bought this gaming laptop last month and I'm mostly happy with it. The display is absolutely stunning and games run super smoothly. However, the battery life is disappointing - I only get about 2 hours when not gaming. The keyboard feels great to type on though!"
+                    </blockquote>
+                    
+                    <h4>Sentiment Analysis Result:</h4>
+                    <pre>{
+  "polarity": "positive",
+  "score": 0.65,
+  "aspects": {
+    "display": {"polarity": "positive", "score": 0.95},
+    "performance": {"polarity": "positive", "score": 0.85},
+    "battery_life": {"polarity": "negative", "score": -0.75},
+    "keyboard": {"polarity": "positive", "score": 0.80}
+  }
+}</pre>
+                </div>
+
+                <p>This analysis shows that while the overall sentiment is positive, there's a specific pain point (battery life) that potential buyers should be aware of.</p>
+
+                <h2>Next Steps</h2>
+
+                <p>Now that you understand how the Sentiment Analysis Agent extracts feelings and opinions from reviews, let's move on to <a href="06_trend_analysis.html">Chapter 6: Trend Analysis Agent</a>, where we'll explore how EggHatch AI identifies patterns and trends across multiple products and reviews.</p>
+            </div>
+            <footer>
+                <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
