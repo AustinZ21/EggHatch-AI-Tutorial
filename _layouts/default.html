@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <header>
+        <h1><a href="{{ "/" | absolute_url }}">{{ site.title }}</a></h1>
+        <p>{{ site.description }}</p>
+      </header>
+      <div class="tutorial-content">
+        {% include navigation.html %}
+        <main>
+          {{ content }}
+        </main>
+      </div>
+      <footer class="site-footer">
+        <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
+      </footer>
+    </div>
+  </body>
+</html>
