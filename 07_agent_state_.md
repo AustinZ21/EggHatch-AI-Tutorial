@@ -1,28 +1,29 @@
 ---
 layout: default
-title: "# Chapter 7: Agent State"
+title: "# Chapter 7: Agent State
+"
 ---
 # Chapter 7: Agent State
 
 Welcome back to the EggHatch AI tutorial! In the last few chapters, we've explored some key parts of our system:
-*   The [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md) acts as the brain, deciding the steps needed to answer your query.
-*   The [LLM Client](03_llm_client_.md) lets the Master Agent talk to the AI model.
-*   The [Data Pipeline](04_data_pipeline_.md) prepares the data for analysis.
-*   Specialized agents like the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md) and [Trend Analysis Agent](06_trend_analysis_agent_.md) perform specific analysis tasks using that data.
+*   The [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html) acts as the brain, deciding the steps needed to answer your query.
+*   The [LLM Client]({{ site.baseurl }}/03_llm_client_.html) lets the Master Agent talk to the AI model.
+*   The [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html) prepares the data for analysis.
+*   Specialized agents like the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html) and [Trend Analysis Agent]({{ site.baseurl }}/06_trend_analysis_agent_.html) perform specific analysis tasks using that data.
 
-As the [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md) guides your request through these different components and steps, a lot of information is generated: your original question, extracted details (like budget), results from the analysis agents (like trending topics), and the final answer being put together.
+As the [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html) guides your request through these different components and steps, a lot of information is generated: your original question, extracted details (like budget), results from the analysis agents (like trending topics), and the final answer being put together.
 
 Where does all this information go? How do the different steps know what the previous steps found? This is where the **Agent State** comes in.
 
 ## What is the Agent State?
 
-Imagine the Agent State is a **shared notebook** or a **digital whiteboard** that travels with your query as it's processed by the [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md).
+Imagine the Agent State is a **shared notebook** or a **digital whiteboard** that travels with your query as it's processed by the [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html).
 
 When your query starts its journey:
 1.  The notebook is created, and your original question is written down.
 2.  The "Understand Query" step reads the question from the notebook, figures out your budget and use case, and writes those findings back into the notebook.
 3.  The "Decompose Tasks" step reads the budget/use case from the notebook, decides which specialist agents are needed (like Trend Analysis), and writes a list of tasks into the notebook.
-4.  The "Execute Task" step reads the first task from the notebook, calls the appropriate agent ([Trend Analysis Agent](06_trend_analysis_agent_.md) in our example), gets the results, and writes those results (trend insights, sentiment overview) into the notebook.
+4.  The "Execute Task" step reads the first task from the notebook, calls the appropriate agent ([Trend Analysis Agent]({{ site.baseurl }}/06_trend_analysis_agent_.html) in our example), gets the results, and writes those results (trend insights, sentiment overview) into the notebook.
 5.  This continues until all tasks are done.
 6.  Finally, the "Synthesize Response" step reads *everything* from the notebook (original query, requirements, all the results) and uses it to write the final answer into the notebook.
 
@@ -33,7 +34,7 @@ The Agent State is the **single source of truth** for everything related to your
 
 ## Why Do We Need Agent State?
 
-Without a shared notebook like the Agent State, each step in the [Master Agent's (Orchestrator's)](02_master_agent__orchestrator__.md) workflow would be isolated. How would the "Synthesize Response" step know the trend insights if the "Execute Task" step didn't put them somewhere accessible?
+Without a shared notebook like the Agent State, each step in the [Master Agent's (Orchestrator's)]({{ site.baseurl }}/02_master_agent__orchestrator__.html) workflow would be isolated. How would the "Synthesize Response" step know the trend insights if the "Execute Task" step didn't put them somewhere accessible?
 
 The Agent State provides:
 
@@ -59,7 +60,7 @@ The final `final_response` is only possible because the `synthesize_response` st
 
 ## How the Agent State Works (High Level Flow)
 
-The [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md), built with LangGraph, explicitly manages the flow of the Agent State. When the Master Agent moves from one step (node) to the next, it passes the current Agent State along. The next step receives this state, does its work (potentially using other agents), and then indicates how the state should be updated.
+The [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html), built with LangGraph, explicitly manages the flow of the Agent State. When the Master Agent moves from one step (node) to the next, it passes the current Agent State along. The next step receives this state, does its work (potentially using other agents), and then indicates how the state should be updated.
 
 ```mermaid
 sequenceDiagram
@@ -86,7 +87,7 @@ In this flow, the Agent State is central. Each step in the Master Agent's graph 
 
 ## Under the Hood: Inside `app/master_agent.py`
 
-The definition and management of the Agent State are handled within the [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md) code, primarily in `app/master_agent.py`.
+The definition and management of the Agent State are handled within the [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html) code, primarily in `app/master_agent.py`.
 
 ### Defining the State Structure
 
@@ -291,15 +292,15 @@ After the LangGraph workflow finishes (reaches the `END` node), the `process_que
 
 The `thread_states` dictionary in `master_agent.py` acts as a simple database to store the `final_state_dict` for each ongoing conversation (`thread_id`). When the same `thread_id` is received in a subsequent `process_query` call, the previous state is loaded, providing memory to the agent.
 
-In summary, the Agent State, defined using Pydantic, serves as the central data container. The LangGraph workflow in the [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md) passes this state between nodes, and each node reads from and writes to the state by returning a dictionary of changes. This shared notebook approach is fundamental to how the Master Agent coordinates information and builds the final response.
+In summary, the Agent State, defined using Pydantic, serves as the central data container. The LangGraph workflow in the [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html) passes this state between nodes, and each node reads from and writes to the state by returning a dictionary of changes. This shared notebook approach is fundamental to how the Master Agent coordinates information and builds the final response.
 
 ## Conclusion
 
-In this chapter, we've learned about the Agent State, the crucial data structure that acts as a shared notebook or whiteboard for the [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md). It holds all the information needed as a user query is processed, from the initial request and extracted requirements to the results from specialized agents and the final response. We saw how it's defined using Pydantic and how different steps (nodes) in the Master Agent's workflow read from and write to this state, enabling seamless communication and the eventual synthesis of a comprehensive answer.
+In this chapter, we've learned about the Agent State, the crucial data structure that acts as a shared notebook or whiteboard for the [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html). It holds all the information needed as a user query is processed, from the initial request and extracted requirements to the results from specialized agents and the final response. We saw how it's defined using Pydantic and how different steps (nodes) in the Master Agent's workflow read from and write to this state, enabling seamless communication and the eventual synthesis of a comprehensive answer.
 
-Now that we understand how the agent keeps track of everything, what about the actual instructions given to the AI models? How do we tell the [LLM Client](03_llm_client_.md) what to ask the AI to extract information or synthesize a response? That's handled by **Prompts**, which we'll explore in the next chapter!
+Now that we understand how the agent keeps track of everything, what about the actual instructions given to the AI models? How do we tell the [LLM Client]({{ site.baseurl }}/03_llm_client_.html) what to ask the AI to extract information or synthesize a response? That's handled by **Prompts**, which we'll explore in the next chapter!
 
-[Next Chapter: Prompts](08_prompts_.md)
+[Next Chapter: Prompts]({{ site.baseurl }}/08_prompts_.html)
 
 ---
 

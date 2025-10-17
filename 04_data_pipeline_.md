@@ -1,10 +1,11 @@
 ---
 layout: default
-title: "# Chapter 4: Data Pipeline"
+title: "# Chapter 4: Data Pipeline
+"
 ---
 # Chapter 4: Data Pipeline
 
-Welcome back to the EggHatch AI tutorial! In the last chapter, [LLM Client](03_llm_client_.md), we learned how our system talks to the powerful AI model itself. The LLM Client is the messenger that sends instructions (prompts) and gets text back.
+Welcome back to the EggHatch AI tutorial! In the last chapter, [LLM Client]({{ site.baseurl }}/03_llm_client_.html), we learned how our system talks to the powerful AI model itself. The LLM Client is the messenger that sends instructions (prompts) and gets text back.
 
 But what does the AI *talk about*? For EggHatch AI to give you helpful advice on PC parts and tech, it needs information about products – like laptop specifications, prices, and what real customers think about them. This is where the **Data Pipeline** comes in.
 
@@ -29,13 +30,13 @@ If our agents tried to work directly with this messy data, they would get confus
 
 Let's go back to our example: You ask, "What's a good gaming laptop for under $1500?".
 
-To answer this, the [Master Agent](02_master_agent__orchestrator__.md) might need to:
+To answer this, the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) might need to:
 
 1.  Find a list of laptops with their specs and prices.
 2.  Analyze customer reviews to understand their feelings (positive/negative) about specific models or features.
 3.  Look at overall trends in reviews (e.g., are people complaining about battery life on recent models?).
 
-All the data needed for these steps – the list of laptops, their prices, the review texts, the review ratings – comes from the Data Pipeline. The [Master Agent](02_master_agent__orchestrator__.md) and the specialized agents ([Sentiment Analysis Agent](05_sentiment_analysis_agent_.md), [Trend Analysis Agent](06_trend_analysis_agent_.md)) *request* the data they need from the Data Pipeline, which provides it in a clean, ready-to-use format.
+All the data needed for these steps – the list of laptops, their prices, the review texts, the review ratings – comes from the Data Pipeline. The [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) and the specialized agents ([Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html), [Trend Analysis Agent]({{ site.baseurl }}/06_trend_analysis_agent_.html)) *request* the data they need from the Data Pipeline, which provides it in a clean, ready-to-use format.
 
 ## What Does the Data Pipeline Do?
 
@@ -300,13 +301,13 @@ Finally, the `DataPipeline` class has simple methods to give other parts of the 
 # ... rest of the class methods ...
 ```
 
-These methods allow the [Master Agent](02_master_agent__orchestrator__.md) or other agents to simply call `data_pipeline.get_processed_reviews()` or `data_pipeline.get_laptop_data()` to receive the data they need, already cleaned and structured. The `filter_reviews_by_query` method is a handy helper for finding reviews relevant to a specific search term.
+These methods allow the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) or other agents to simply call `data_pipeline.get_processed_reviews()` or `data_pipeline.get_laptop_data()` to receive the data they need, already cleaned and structured. The `filter_reviews_by_query` method is a handy helper for finding reviews relevant to a specific search term.
 
 ## How Agents Use the Data Pipeline
 
 When a specialized agent, like the one performing sentiment analysis, needs data, it doesn't open files itself. It interacts with an instance of the `DataPipeline` class.
 
-For example, the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md) will likely need the list of processed reviews. It would get this by calling:
+For example, the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html) will likely need the list of processed reviews. It would get this by calling:
 
 ```python
 # Imagine this code is inside a specialized agent
@@ -328,9 +329,9 @@ The agent doesn't need to know *how* the reviews were loaded or cleaned, only th
 
 In this chapter, we've learned that the Data Pipeline is EggHatch AI's crucial data preparation component. It's like the kitchen's prep station, taking raw data ingredients (files on disk), cleaning and structuring them, and making them available in a consistent, easy-to-use format for the rest of the system. It handles loading, cleaning, and preprocessing so that specialized agents can focus on analysis without worrying about data messiness.
 
-Now that we have our data cleaned and ready, we can start analyzing it! In the next chapter, we'll look at one of the specialized agents that uses this data: the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md), which figures out the feelings expressed in customer reviews.
+Now that we have our data cleaned and ready, we can start analyzing it! In the next chapter, we'll look at one of the specialized agents that uses this data: the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html), which figures out the feelings expressed in customer reviews.
 
-[Next Chapter: Sentiment Analysis Agent](05_sentiment_analysis_agent_.md)
+[Next Chapter: Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html)
 
 ---
 

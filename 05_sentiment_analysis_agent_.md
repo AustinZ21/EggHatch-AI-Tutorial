@@ -1,10 +1,11 @@
 ---
 layout: default
-title: "# Chapter 5: Sentiment Analysis Agent"
+title: "# Chapter 5: Sentiment Analysis Agent
+"
 ---
 # Chapter 5: Sentiment Analysis Agent
 
-Welcome back to the EggHatch AI tutorial! In the last chapter, [Data Pipeline](04_data_pipeline_.md), we learned how our system gathers, cleans, and prepares raw data, like customer reviews, making it ready for analysis.
+Welcome back to the EggHatch AI tutorial! In the last chapter, [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html), we learned how our system gathers, cleans, and prepares raw data, like customer reviews, making it ready for analysis.
 
 Now that we have this clean data, what can we *do* with it? One very useful thing is to understand how people *feel* about the products they are reviewing. This is where the **Sentiment Analysis Agent** comes in.
 
@@ -25,7 +26,7 @@ Knowing the sentiment of reviews is incredibly helpful! It tells us whether cust
 When you're looking at hundreds or thousands of reviews for a product, you can't possibly read them all yourself to get a sense of how people feel. You need an automated way to get an summary of the overall mood.
 
 *   **For Users:** When you ask EggHatch AI for a recommendation, knowing the general sentiment from reviews helps the system tell you not just *what* the specs are, but also *how satisfied* users are.
-*   **For Analysis:** Other agents (like the [Trend Analysis Agent](06_trend_analysis_agent_.md) we'll see later) might want to combine sentiment with other findings. For example, finding out that many people are talking about "battery life" AND the sentiment around those mentions is mostly "negative".
+*   **For Analysis:** Other agents (like the [Trend Analysis Agent]({{ site.baseurl }}/06_trend_analysis_agent_.html) we'll see later) might want to combine sentiment with other findings. For example, finding out that many people are talking about "battery life" AND the sentiment around those mentions is mostly "negative".
 
 The Sentiment Analysis Agent provides this crucial emotional insight from the raw text data.
 
@@ -33,21 +34,21 @@ The Sentiment Analysis Agent provides this crucial emotional insight from the ra
 
 Let's go back to our example: "What's a good gaming laptop for under $1500?".
 
-If the [Master Agent](02_master_agent__orchestrator__.md) needs to figure out if a specific laptop model is well-liked within that budget, it can use the Sentiment Analysis Agent.
+If the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) needs to figure out if a specific laptop model is well-liked within that budget, it can use the Sentiment Analysis Agent.
 
 The process might look like this:
 
-1.  The [Master Agent](02_master_agent__orchestrator__.md) identifies relevant laptops.
-2.  It asks the [Data Pipeline](04_data_pipeline_.md) for all the customer reviews for those laptops.
+1.  The [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) identifies relevant laptops.
+2.  It asks the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html) for all the customer reviews for those laptops.
 3.  It gives these reviews to the Sentiment Analysis Agent.
 4.  The Sentiment Analysis Agent analyzes each review individually.
 5.  It then provides an *overall summary* back to the Master Agent, like "For Laptop X, 75% of reviews were positive, 10% neutral, and 15% negative."
 
-This overview helps the [Master Agent](02_master_agent__orchestrator__.md) build a more complete picture for its recommendation.
+This overview helps the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) build a more complete picture for its recommendation.
 
 ## How to Use the Sentiment Analysis Agent
 
-From the perspective of another agent (like the [Master Agent](02_master_agent__orchestrator__.md)), using the Sentiment Analysis Agent is straightforward. You interact with a `SentimentAnalyzer` object, typically obtained via a helper function to ensure you use the correct instance.
+From the perspective of another agent (like the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html)), using the Sentiment Analysis Agent is straightforward. You interact with a `SentimentAnalyzer` object, typically obtained via a helper function to ensure you use the correct instance.
 
 Here's how an agent might get the overall sentiment for all available reviews:
 
@@ -65,7 +66,7 @@ sentiment_overview = sentiment_analyzer.get_sentiment_overview()
 print(sentiment_overview)
 ```
 
-The `get_sentiment_analyzer()` function gives you access to the agent. You then call its `get_sentiment_overview()` method. You don't need to manually load reviews here; the `SentimentAnalyzer` object knows how to get them from the [Data Pipeline](04_data_pipeline_.md) itself!
+The `get_sentiment_analyzer()` function gives you access to the agent. You then call its `get_sentiment_overview()` method. You don't need to manually load reviews here; the `SentimentAnalyzer` object knows how to get them from the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html) itself!
 
 The `sentiment_overview` dictionary will contain details like the count and percentage of positive, neutral, and negative reviews, plus an overall summary label like "Very Positive" or "Mixed".
 
@@ -113,7 +114,7 @@ sequenceDiagram
     SA-->>OtherAgent: Returns Sentiment Overview Dictionary
 ```
 
-The Sentiment Analysis Agent acts as a data processor. It gets the raw material (reviews) from the [Data Pipeline](04_data_pipeline_.md), runs its analysis (sentiment classification) using the AI model (or fallback), summarizes the findings, and provides the result.
+The Sentiment Analysis Agent acts as a data processor. It gets the raw material (reviews) from the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html), runs its analysis (sentiment classification) using the AI model (or fallback), summarizes the findings, and provides the result.
 
 ## Under the Hood: Inside `app/agents/sentiment_analysis.py`
 
@@ -334,11 +335,11 @@ This structure allows the Sentiment Analysis Agent to be easily used by other pa
 
 ## Conclusion
 
-In this chapter, we've learned about the Sentiment Analysis Agent, a specialist agent responsible for understanding the emotional tone of text, particularly customer reviews. We saw how it uses a powerful AI model (with a simple fallback) to classify text as positive, negative, or neutral. It works closely with the [Data Pipeline](04_data_pipeline_.md) to get the necessary review text and provides valuable insights (sentiment distribution, overall mood) that other agents, like the [Master Agent](02_master_agent__orchestrator__.md), can use to inform their decisions and recommendations.
+In this chapter, we've learned about the Sentiment Analysis Agent, a specialist agent responsible for understanding the emotional tone of text, particularly customer reviews. We saw how it uses a powerful AI model (with a simple fallback) to classify text as positive, negative, or neutral. It works closely with the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html) to get the necessary review text and provides valuable insights (sentiment distribution, overall mood) that other agents, like the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html), can use to inform their decisions and recommendations.
 
-Analyzing sentiment tells us how people *feel*. But what if we want to know *what* they are talking about, what features are popular, or what problems are common? That's the job of the [Trend Analysis Agent](06_trend_analysis_agent_.md), which we'll explore in the next chapter!
+Analyzing sentiment tells us how people *feel*. But what if we want to know *what* they are talking about, what features are popular, or what problems are common? That's the job of the [Trend Analysis Agent]({{ site.baseurl }}/06_trend_analysis_agent_.html), which we'll explore in the next chapter!
 
-[Next Chapter: Trend Analysis Agent](06_trend_analysis_agent_.md)
+[Next Chapter: Trend Analysis Agent]({{ site.baseurl }}/06_trend_analysis_agent_.html)
 
 ---
 

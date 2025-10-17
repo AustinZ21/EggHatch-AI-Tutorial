@@ -43,22 +43,14 @@ flowchart TD
 
 ## Chapters
 
-1. [User Interface (Dashboard)
-](01_user_interface__dashboard__.md)
-2. [Master Agent (Orchestrator)
-](02_master_agent__orchestrator__.md)
-3. [LLM Client
-](03_llm_client_.md)
-4. [Data Pipeline
-](04_data_pipeline_.md)
-5. [Sentiment Analysis Agent
-](05_sentiment_analysis_agent_.md)
-6. [Trend Analysis Agent
-](06_trend_analysis_agent_.md)
-7. [Agent State
-](07_agent_state_.md)
-8. [Prompts
-](08_prompts_.md)
+1. [User Interface (Dashboard)]({{ site.baseurl }}/01_user_interface__dashboard__.html)
+2. [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html)
+3. [LLM Client]({{ site.baseurl }}/03_llm_client_.html)
+4. [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html)
+5. [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html)
+6. [Trend Analysis Agent]({{ site.baseurl }}/06_trend_analysis_agent_.html)
+7. [Agent State]({{ site.baseurl }}/07_agent_state_.html)
+8. [Prompts]({{ site.baseurl }}/08_prompts_.html)
 
 
 ---

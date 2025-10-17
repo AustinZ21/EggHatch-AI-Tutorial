@@ -1,10 +1,11 @@
 ---
 layout: default
-title: "# Chapter 3: LLM Client"
+title: "# Chapter 3: LLM Client
+"
 ---
 # Chapter 3: LLM Client
 
-Welcome back to the EggHatch AI tutorial! In the last chapter, [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md), we learned that the Master Agent is the "brain" or "project manager" that takes your question and figures out the steps needed to answer it. It decides *what* needs to be done.
+Welcome back to the EggHatch AI tutorial! In the last chapter, [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html), we learned that the Master Agent is the "brain" or "project manager" that takes your question and figures out the steps needed to answer it. It decides *what* needs to be done.
 
 But how does the Master Agent actually *talk* to the AI itself? How does it send those instructions or prompts and get text back? That's where the **LLM Client** comes in.
 
@@ -14,7 +15,7 @@ Think of the LLM Client as the **dedicated messenger service** for the EggHatch 
 
 The LLM is the actual AI model (in our case, Gemma running through Ollama) that can understand language, generate text, and perform complex reasoning tasks. It's the expert that provides the raw intelligence.
 
-The LLM Client is the specialized tool that allows other parts of our system, like the [Master Agent](02_master_agent__orchestrator__.md), to send messages (prompts) to the LLM and receive the AI's generated text replies.
+The LLM Client is the specialized tool that allows other parts of our system, like the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html), to send messages (prompts) to the LLM and receive the AI's generated text replies.
 
 ## Why Do We Need an LLM Client?
 
@@ -31,7 +32,7 @@ The LLM Client hides all these technical details. Other parts of EggHatch AI don
 
 Let's go back to our example query: "What's a good gaming laptop for under $1500?".
 
-When the [Master Agent](02_master_agent__orchestrator__.md) receives this, one of the first things it needs to do is **understand** the query. It needs to ask the LLM: "Hey AI, figure out what the user is asking for (query type), their budget, and their main use case from this text: 'What's a good gaming laptop for under $1500?'".
+When the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) receives this, one of the first things it needs to do is **understand** the query. It needs to ask the LLM: "Hey AI, figure out what the user is asking for (query type), their budget, and their main use case from this text: 'What's a good gaming laptop for under $1500?'".
 
 Later, after gathering information, the Master Agent needs to **synthesize** the final answer. It needs to ask the LLM again: "Hey AI, take the user's original query and these analysis results, and write a helpful recommendation."
 
@@ -217,7 +218,7 @@ This method sets `stream=True` in the request. It then loops through the incomin
 
 ## How the Master Agent Uses the LLM Client
 
-As we saw in Chapter 2, the [Master Agent (Orchestrator)](02_master_agent__orchestrator__.md) interacts with the LLM Client through the `llm_client` object which is created at the top of `app/master_agent.py`:
+As we saw in Chapter 2, the [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html) interacts with the LLM Client through the `llm_client` object which is created at the top of `app/master_agent.py`:
 
 ```python
 # ... from app/master_agent.py ...
@@ -252,21 +253,21 @@ Then, inside the Master Agent's nodes (the functions that perform steps), the `l
 
 The `understand_query` function simply calls `llm_client.generate()`, passing it the specific `prompt` needed to understand the user's question and a `system_prompt` to give the AI context about its role. It receives the AI's response back (after collecting the streamed output) and then continues its own logic (parsing the response, updating the state, etc.). It doesn't care *how* the message got to the AI or *how* the reply came back; it just trusts the `llm_client` to handle the communication.
 
-This separation of concerns is important! The LLM Client focuses only on talking to the AI, while the [Master Agent](02_master_agent__orchestrator__.md) focuses only on orchestrating the overall workflow.
+This separation of concerns is important! The LLM Client focuses only on talking to the AI, while the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) focuses only on orchestrating the overall workflow.
 
 ## Conclusion
 
 In this chapter, we've explored the role of the LLM Client as the crucial messenger service for EggHatch AI. We learned that it:
 
 *   Handles all the technical details of communicating with the Large Language Model (Gemma via Ollama).
-*   Allows other parts of the system, like the [Master Agent](02_master_agent__orchestrator__.md), to easily send prompts and receive AI-generated text.
+*   Allows other parts of the system, like the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html), to easily send prompts and receive AI-generated text.
 *   Manages connections, errors, retries, and can handle streaming responses for a better user experience.
 
 It provides the vital link between our system's logic and the powerful AI model that forms its intelligence core.
 
-Now that we know how the Master Agent talks to the AI, what about the data the AI needs to analyze? For our PC part use case, we need data about products! That's handled by the [Data Pipeline](04_data_pipeline_.md), which we'll dive into in the next chapter.
+Now that we know how the Master Agent talks to the AI, what about the data the AI needs to analyze? For our PC part use case, we need data about products! That's handled by the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html), which we'll dive into in the next chapter.
 
-[Next Chapter: Data Pipeline](04_data_pipeline_.md)
+[Next Chapter: Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html)
 
 ---
 

@@ -22,7 +22,7 @@ Without a UI, all the clever parts of EggHatch AI would just be code running in 
 The User Interface for EggHatch AI does a few main things:
 
 1.  **Takes your question:** It provides a place for you to type what you want to ask.
-2.  **Sends your question:** When you hit "Send," it packages up your question and sends it to the "brain" of EggHatch AI (which we'll learn about in the next chapter, the [Master Agent](02_master_agent__orchestrator__.md)).
+2.  **Sends your question:** When you hit "Send," it packages up your question and sends it to the "brain" of EggHatch AI (which we'll learn about in the next chapter, the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html)).
 3.  **Receives the answer:** It waits for the answer to come back from the brain.
 4.  **Displays the answer:** It shows you the response you got.
 5.  **Shows the conversation history:** It remembers previous questions and answers so you can see the flow of your chat.
@@ -42,7 +42,7 @@ For example, you might type: "What's a good budget gaming PC build?" and click S
 
 ## Under the Hood: How the UI Works
 
-So, what happens when you type your question and click "Send"? It's like handing your question to a friendly assistant who then takes it to the main expert (the [Master Agent](02_master_agent__orchestrator__.md)) to get the answer.
+So, what happens when you type your question and click "Send"? It's like handing your question to a friendly assistant who then takes it to the main expert (the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html)) to get the answer.
 
 Here’s a simple diagram showing the flow:
 
@@ -145,7 +145,7 @@ if "messages" not in st.session_state:
 When you click "Send":
 1.  The `user_input` is taken from the text box.
 2.  It's added to the `st.session_state.messages` list, marked as a "user" message.
-3.  Crucially, `process_query(user_input, ...)` is called. This function isn't part of the UI itself; it's how the UI *talks* to the [Master Agent](02_master_agent__orchestrator__.md) (which handles processing the query).
+3.  Crucially, `process_query(user_input, ...)` is called. This function isn't part of the UI itself; it's how the UI *talks* to the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) (which handles processing the query).
 4.  The response received from `process_query` is then added to the `st.session_state.messages` list, marked as an "assistant" message.
 5.  `st.rerun()` tells Streamlit to refresh the page, running the script again from the top but keeping the `st.session_state`. This redraws the page *with* the new messages in the history.
 
@@ -170,7 +170,7 @@ for message in st.session_state.messages:
 
 This code loops through all the messages stored in `st.session_state.messages` and displays them one by one, using different styles (`user-message` or `assistant-message` CSS classes, which are defined elsewhere in the code) to make it clear who said what.
 
-You can see how the UI is relatively simple: it gets input, calls another part of the system ([Master Agent](02_master_agent__orchestrator__.md)), and displays the output. It's the welcoming front door for our AI!
+You can see how the UI is relatively simple: it gets input, calls another part of the system ([Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html)), and displays the output. It's the welcoming front door for our AI!
 
 *(Note: The actual `dashboard_app.py` code includes more details like managing the conversation thread ID for context, simulating streaming output, and adding a sidebar with settings and examples. We simplified it here to focus on the core input/output/display loop.)*
 
@@ -185,9 +185,9 @@ In this chapter, we learned that the User Interface (Dashboard) is the part of E
 
 It handles the communication layer so the user doesn't need to worry about how the AI processes the information.
 
-But where do those questions *go* after the UI sends them? That's handled by the [Master Agent](02_master_agent__orchestrator__.md), which we'll explore in the next chapter!
+But where do those questions *go* after the UI sends them? That's handled by the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html), which we'll explore in the next chapter!
 
-[Next Chapter: Master Agent (Orchestrator)](02_master_agent__orchestrator__.md)
+[Next Chapter: Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_agent__orchestrator__.html)
 
 ---
 

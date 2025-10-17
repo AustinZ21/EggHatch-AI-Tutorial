@@ -5,7 +5,7 @@ title: "Chapter 2: Master Agent (Orchestrator)"
 
 # Chapter 2: Master Agent (Orchestrator)
 
-Welcome back to the EggHatch AI tutorial! In the last chapter, [User Interface (Dashboard)](01_user_interface__dashboard__.md), we saw how you, the user, interact with EggHatch AI – typing questions into the Dashboard and seeing the answers appear. The User Interface is like the friendly front door.
+Welcome back to the EggHatch AI tutorial! In the last chapter, [User Interface (Dashboard)]({{ site.baseurl }}/01_user_interface__dashboard__.html), we saw how you, the user, interact with EggHatch AI – typing questions into the Dashboard and seeing the answers appear. The User Interface is like the friendly front door.
 
 But once you've handed your question through that front door, where does it go? And who figures out what to *do* with it? That's the job of the **Master Agent**, also known as the **Orchestrator**.
 
@@ -58,7 +58,7 @@ This flow ensures that every query goes through the necessary steps to get the b
 
 As the Master Agent moves through these steps, it needs to remember things: the original query, the extracted budget, the results from the Trend Analysis Agent, etc. This temporary "memory" or "scratchpad" is called the **Agent State**.
 
-We'll dive deeper into the Agent State in a dedicated chapter ([Agent State](07_agent_state_.md)), but for now, just know that the Master Agent passes this `AgentState` object (which is like a structured container for information) from one step to the next, adding or updating information along the way.
+We'll dive deeper into the Agent State in a dedicated chapter ([Agent State]({{ site.baseurl }}/07_agent_state_.html)), but for now, just know that the Master Agent passes this `AgentState` object (which is like a structured container for information) from one step to the next, adding or updating information along the way.
 
 ## How the UI Uses the Master Agent
 
@@ -113,7 +113,7 @@ class AgentState(BaseModel):
 # ... rest of the file ...
 ```
 
-This code snippet shows that `AgentState` is a class that lists all the pieces of information the agent needs to track, like `user_query` and `final_response`. We'll learn more about this in [Agent State](07_agent_state_.md).
+This code snippet shows that `AgentState` is a class that lists all the pieces of information the agent needs to track, like `user_query` and `final_response`. We'll learn more about this in [Agent State]({{ site.baseurl }}/07_agent_state_.html).
 
 ### The Nodes (The Steps)
 
@@ -237,15 +237,15 @@ sequenceDiagram
     UI-->>User: Display Final Answer
 ```
 
-This diagram shows how the Master Agent coordinates the flow, involving the [LLM Client](03_llm_client_.md) for understanding and synthesis, and the specialized agents for specific analysis tasks.
+This diagram shows how the Master Agent coordinates the flow, involving the [LLM Client]({{ site.baseurl }}/03_llm_client_.html) for understanding and synthesis, and the specialized agents for specific analysis tasks.
 
 ## Conclusion
 
 In this chapter, we've seen that the Master Agent is the central control unit of EggHatch AI. It takes your question from the User Interface, understands your needs, plans and executes the necessary steps using a State Graph (flowchart), involving other specialist agents and the LLM, and finally crafts the complete answer before sending it back. It's the project manager making sure the right things happen in the right order.
 
-We briefly touched on the role of the **LLM (Large Language Model)**, which helps the Master Agent understand queries and synthesize responses. In the next chapter, we'll take a closer look at the [LLM Client](03_llm_client_.md) and how EggHatch AI interacts with powerful AI models.
+We briefly touched on the role of the **LLM (Large Language Model)**, which helps the Master Agent understand queries and synthesize responses. In the next chapter, we'll take a closer look at the [LLM Client]({{ site.baseurl }}/03_llm_client_.html) and how EggHatch AI interacts with powerful AI models.
 
-[Next Chapter: LLM Client](03_llm_client_.md)
+[Next Chapter: LLM Client]({{ site.baseurl }}/03_llm_client_.html)
 
 ---
 

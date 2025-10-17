@@ -1,10 +1,11 @@
 ---
 layout: default
-title: "# Chapter 6: Trend Analysis Agent"
+title: "# Chapter 6: Trend Analysis Agent
+"
 ---
 # Chapter 6: Trend Analysis Agent
 
-Welcome back to the EggHatch AI tutorial! In our last chapter, [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md), we learned how to understand the *mood* of customer reviews – whether people feel positive, negative, or neutral about a product.
+Welcome back to the EggHatch AI tutorial! In our last chapter, [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html), we learned how to understand the *mood* of customer reviews – whether people feel positive, negative, or neutral about a product.
 
 Knowing how people *feel* is great, but what if we want to know *what* they are actually talking about? What specific features are causing those positive or negative feelings? What topics come up most often? This is where the **Trend Analysis Agent** steps in.
 
@@ -12,7 +13,7 @@ Knowing how people *feel* is great, but what if we want to know *what* they are 
 
 Think of the Trend Analysis Agent as your **expert market researcher**. It doesn't just count happy or sad faces; it reads through *all* the customer feedback and figures out the main topics and features that customers are discussing.
 
-It acts like a summary engine, finding common themes in large amounts of text and telling you not just *what* those themes are, but also how people *feel* about them (by integrating the work of the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md)).
+It acts like a summary engine, finding common themes in large amounts of text and telling you not just *what* those themes are, but also how people *feel* about them (by integrating the work of the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html)).
 
 Its main goals are to:
 
@@ -39,18 +40,18 @@ The Trend Analysis Agent turns unstructured text data into structured insights a
 
 Let's go back to our running example: You ask, "What's a good gaming laptop for under $1500?".
 
-While the [Master Agent](02_master_agent__orchestrator__.md) and other agents help find options and check specs, the Trend Analysis Agent adds a crucial layer: real-world user experience trends.
+While the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) and other agents help find options and check specs, the Trend Analysis Agent adds a crucial layer: real-world user experience trends.
 
 Here's how the Trend Analysis Agent might help with this query:
 
-1.  The [Master Agent](02_master_agent__orchestrator__.md) might ask the Trend Analysis Agent to analyze reviews relevant to gaming laptops (perhaps filtered by price or models).
-2.  The Trend Analysis Agent gets the necessary review data from the [Data Pipeline](04_data_pipeline_.md).
+1.  The [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) might ask the Trend Analysis Agent to analyze reviews relevant to gaming laptops (perhaps filtered by price or models).
+2.  The Trend Analysis Agent gets the necessary review data from the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html).
 3.  It processes these reviews to find common topics. It might identify topics around "performance," "battery life," "display," and "cooling."
-4.  For each topic, it asks the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md) how people feel about reviews discussing this topic. It might find "performance" sentiment is positive, "battery life" is negative, "display" is positive, and "cooling" is mixed.
+4.  For each topic, it asks the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html) how people feel about reviews discussing this topic. It might find "performance" sentiment is positive, "battery life" is negative, "display" is positive, and "cooling" is mixed.
 5.  It also tries to identify mentions of specific features like "RTX 4060," "144Hz display," "mechanical keyboard," etc., and their associated sentiment.
 6.  It packages all these findings (topics, feature mentions, and their sentiments) into a summary report.
 
-The [Master Agent](02_master_agent__orchestrator__.md) can then use this report to provide a more nuanced answer, like recommending a laptop that performs well and highlighting that users love its screen quality, while maybe adding a note that battery life is a common downside for gaming laptops in general.
+The [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) can then use this report to provide a more nuanced answer, like recommending a laptop that performs well and highlighting that users love its screen quality, while maybe adding a note that battery life is a common downside for gaming laptops in general.
 
 ## How to Use the Trend Analysis Agent
 
@@ -81,11 +82,11 @@ What does the output look like? The `analysis_results` dictionary contains sever
 
 *   `topics`: A list of dictionaries, each describing a detected topic (its keywords, an attempt at a name, and overall sentiment).
 *   `popular_features`: A list of dictionaries for features identified (e.g., "display," "battery"), how often they were mentioned, and their sentiment.
-*   `sentiment_overview`: An overall sentiment summary (similar to what the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md) provides directly).
+*   `sentiment_overview`: An overall sentiment summary (similar to what the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html) provides directly).
 *   `recommendations`: Text suggestions based on the trends (e.g., "Emphasize performance in marketing").
 *   `top_laptops`: A list of laptops recommended based on criteria like ratings and potential relevance to the query.
 
-This structured output makes it easy for the [Master Agent](02_master_agent__orchestrator__.md) to incorporate these findings into the final response.
+This structured output makes it easy for the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) to incorporate these findings into the final response.
 
 ## How the Trend Analysis Agent Works (The Flow)
 
@@ -116,7 +117,7 @@ sequenceDiagram
     TA-->>OtherAgent: Returns Trend Analysis Results Dictionary
 ```
 
-The Trend Analysis Agent is a coordinator itself in this flow. It depends heavily on the [Data Pipeline](04_data_pipeline_.md) for its input data and the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md) for sentiment scoring. It also uses various NLP (Natural Language Processing) techniques and models internally to understand the text content.
+The Trend Analysis Agent is a coordinator itself in this flow. It depends heavily on the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html) for its input data and the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html) for sentiment scoring. It also uses various NLP (Natural Language Processing) techniques and models internally to understand the text content.
 
 ## Under the Hood: Inside `app/agents/trend_analysis.py`
 
@@ -126,7 +127,7 @@ The main component is the `TrendAnalysisAgent` class.
 
 ### Setting up the Agent
 
-The `__init__` method prepares the agent by getting instances of other necessary agents ([Data Pipeline](04_data_pipeline_.md), [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md)) and initializing the specialized NLP models it needs.
+The `__init__` method prepares the agent by getting instances of other necessary agents ([Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html), [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html)) and initializing the specialized NLP models it needs.
 
 ```python
 # ... inside app/agents/trend_analysis.py ...
@@ -158,7 +159,7 @@ The `__init__` function gets instances of the `DataPipeline` and `SentimentAnaly
 
 ### Finding Topics (Topic Modeling)
 
-The `_initialize_topic_model` method is where Latent Dirichlet Allocation (LDA) is used to find recurring topics in the review text obtained from the [Data Pipeline](04_data_pipeline_.md).
+The `_initialize_topic_model` method is where Latent Dirichlet Allocation (LDA) is used to find recurring topics in the review text obtained from the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html).
 
 ```python
 # ... inside the TrendAnalysisAgent class ...
@@ -197,7 +198,7 @@ This method first gets all the review texts from the `data_pipeline`. It then us
 
 ### Sentiment Per Topic/Feature
 
-The `_analyze_topic_sentiments` and `_identify_popular_features` methods demonstrate how the Trend Analysis Agent uses the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md).
+The `_analyze_topic_sentiments` and `_identify_popular_features` methods demonstrate how the Trend Analysis Agent uses the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html).
 
 For topics:
 
@@ -365,11 +366,11 @@ This function serves as the public interface for the Trend Analysis Agent. It pu
 
 ## Conclusion
 
-In this chapter, we've explored the Trend Analysis Agent, EggHatch AI's market researcher. We learned how it goes beyond just sentiment to identify the actual topics and features customers are discussing in reviews. It uses techniques like topic modeling (LDA) and feature identification (zero-shot classification or keywords), working closely with the [Data Pipeline](04_data_pipeline_.md) for data and the [Sentiment Analysis Agent](05_sentiment_analysis_agent_.md) to understand the mood around specific trends. The output provides valuable, structured insights into customer feedback, helping other agents (especially the [Master Agent](02_master_agent__orchestrator__.md)) build more informed and helpful responses.
+In this chapter, we've explored the Trend Analysis Agent, EggHatch AI's market researcher. We learned how it goes beyond just sentiment to identify the actual topics and features customers are discussing in reviews. It uses techniques like topic modeling (LDA) and feature identification (zero-shot classification or keywords), working closely with the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html) for data and the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html) to understand the mood around specific trends. The output provides valuable, structured insights into customer feedback, helping other agents (especially the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html)) build more informed and helpful responses.
 
-These specialized agents perform specific tasks. But how does the [Master Agent](02_master_agent__orchestrator__.md) keep track of what needs to be done, what results have been gathered, and the overall progress? That's managed by the **Agent State**, which we'll dive into in the next chapter!
+These specialized agents perform specific tasks. But how does the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) keep track of what needs to be done, what results have been gathered, and the overall progress? That's managed by the **Agent State**, which we'll dive into in the next chapter!
 
-[Next Chapter: Agent State](07_agent_state_.md)
+[Next Chapter: Agent State]({{ site.baseurl }}/07_agent_state_.html)
 
 ---
 
