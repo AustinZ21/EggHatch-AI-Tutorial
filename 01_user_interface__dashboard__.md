@@ -26,6 +26,7 @@ The User Interface for EggHatch AI does a few main things:
 3.  **Receives the answer:** It waits for the answer to come back from the brain.
 4.  **Displays the answer:** It shows you the response you got.
 5.  **Shows the conversation history:** It remembers previous questions and answers so you can see the flow of your chat.
+6.  **Shows comparison breakdowns:** For explicit comparison questions, it can now render a structured recommendation summary and side-by-side table.
 
 ## How to Use the User Interface
 
@@ -61,6 +62,12 @@ sequenceDiagram
 ```
 
 The User Interface's main job is to be the bridge between you and the rest of the EggHatch AI system.
+
+## What Changed In The Latest Repo
+
+The latest EggHatch-AI UI is no longer just a chat transcript. It now knows how to display a structured comparison payload when the backend includes one inside `trend_insights`.
+
+That makes the dashboard more useful as a decision-support surface: the user can read the natural-language answer and also inspect the recommendation table and tradeoffs directly.
 
 ## Peeking at the Code (`dashboard_app.py`)
 

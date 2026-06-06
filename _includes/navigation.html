@@ -1,14 +1,16 @@
 <nav class="tutorial-nav">
-  <h2>Tutorial Chapters</h2>
+  <h2>Chapters</h2>
   <ul>
-    <li><a href="{{ site.baseurl }}/">Home</a></li>
-    <li><a href="{{ site.baseurl }}/01_user_interface__dashboard__">Chapter 1: User Interface (Dashboard)</a></li>
-    <li><a href="{{ site.baseurl }}/02_master_agent__orchestrator__">Chapter 2: Master Agent (Orchestrator)</a></li>
-    <li><a href="{{ site.baseurl }}/03_llm_client_">Chapter 3: LLM Client</a></li>
-    <li><a href="{{ site.baseurl }}/04_data_pipeline_">Chapter 4: Data Pipeline</a></li>
-    <li><a href="{{ site.baseurl }}/05_sentiment_analysis_agent_">Chapter 5: Sentiment Analysis Agent</a></li>
-    <li><a href="{{ site.baseurl }}/06_trend_analysis_agent_">Chapter 6: Trend Analysis Agent</a></li>
-    <li><a href="{{ site.baseurl }}/07_agent_state_">Chapter 7: Agent State</a></li>
-    <li><a href="{{ site.baseurl }}/08_prompts_">Chapter 8: Prompts</a></li>
+    <li><a href="{{ site.baseurl }}/"{% if page.url == "/" %} aria-current="page"{% endif %}>Overview</a></li>
+    <li><a href="{{ site.baseurl }}/01_user_interface__dashboard__.html"{% if page.url contains "01_user_interface__dashboard__" %} aria-current="page"{% endif %}>01. User Interface</a></li>
+    <li><a href="{{ site.baseurl }}/02_master_agent__orchestrator__.html"{% if page.url contains "02_master_agent__orchestrator__" %} aria-current="page"{% endif %}>02. Master Agent</a></li>
+    <li><a href="{{ site.baseurl }}/03_llm_client_.html"{% if page.url contains "03_llm_client_" %} aria-current="page"{% endif %}>03. LLM Client</a></li>
+    <li><a href="{{ site.baseurl }}/04_data_pipeline_.html"{% if page.url contains "04_data_pipeline_" %} aria-current="page"{% endif %}>04. Data Pipeline</a></li>
+    <li><a href="{{ site.baseurl }}/05_sentiment_analysis_agent_.html"{% if page.url contains "05_sentiment_analysis_agent_" %} aria-current="page"{% endif %}>05. Sentiment Analysis</a></li>
+    <li><a href="{{ site.baseurl }}/06_trend_analysis_agent_.html"{% if page.url contains "06_trend_analysis_agent_" %} aria-current="page"{% endif %}>06. Trend Analysis</a></li>
+    <li><a href="{{ site.baseurl }}/07_agent_state_.html"{% if page.url contains "07_agent_state_" %} aria-current="page"{% endif %}>07. Agent State</a></li>
+    <li><a href="{{ site.baseurl }}/08_prompts_.html"{% if page.url contains "08_prompts_" %} aria-current="page"{% endif %}>08. Prompts</a></li>
+    <li><a href="{{ site.baseurl }}/09_explainable_comparison_.html"{% if page.url contains "09_explainable_comparison_" %} aria-current="page"{% endif %}>09. Explainable Comparison</a></li>
+    <li><a href="{{ site.baseurl }}/10_spec_driven_workflow_.html"{% if page.url contains "10_spec_driven_workflow_" %} aria-current="page"{% endif %}>10. Spec-Driven Workflow</a></li>
   </ul>
 </nav>

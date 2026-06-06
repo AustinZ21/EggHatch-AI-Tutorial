@@ -1,6 +1,6 @@
 # EggHatch-AI Tutorial
 
-This repository contains a comprehensive tutorial for the [EggHatch-AI](https://github.com/AustinZ21/EggHatch-AI) project, an AI assistant focused on PC building and tech gear shopping.
+This repository contains a refreshed tutorial site for [EggHatch-AI](https://github.com/AustinZ21/EggHatch-AI), an open-source AI shopping agent prototype focused on gaming laptop recommendations, explainable comparison, and local-first agent workflows.
 
 ## About This Tutorial
 
@@ -25,6 +25,8 @@ The tutorial is organized into the following chapters:
 6. [Trend Analysis Agent](06_trend_analysis_agent_.md)
 7. [Agent State](07_agent_state_.md)
 8. [Prompts](08_prompts_.md)
+9. [Explainable Comparison](09_explainable_comparison_.md)
+10. [Spec-Driven Workflow](10_spec_driven_workflow_.md)
 
 ## Setting Up GitHub Pages
 

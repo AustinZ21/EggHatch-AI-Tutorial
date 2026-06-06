@@ -1,32 +1,131 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
+<html lang="{{ site.lang | default: 'en-US' }}">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
-    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
-    <!-- Mermaid for flowcharts -->
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     <script type="module">
-      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-      mermaid.initialize({ startOnLoad: true });
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+
+      const diagramTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default";
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: diagramTheme,
+        securityLevel: "loose",
+        flowchart: {
+          curve: "basis",
+          useMaxWidth: true,
+        },
+        sequence: {
+          useMaxWidth: true,
+          wrap: true,
+        },
+      });
+
+      function replaceMermaidBlocks() {
+        const selectors = [
+          "pre > code.language-mermaid",
+          ".language-mermaid pre code",
+          "code.language-mermaid",
+        ];
+
+        document.querySelectorAll(selectors.join(", ")).forEach((codeBlock, index) => {
+          const pre = codeBlock.closest("pre");
+          const wrapper = pre?.parentElement?.classList.contains("highlight") ? pre.parentElement : pre;
+          const target = wrapper || codeBlock.parentElement;
+
+          if (!target || target.dataset.mermaidProcessed === "true") {
+            return;
+          }
+
+          const source = codeBlock.textContent?.trim();
+          if (!source) {
+            return;
+          }
+
+          const container = document.createElement("div");
+          container.className = "mermaid";
+          container.dataset.diagramId = `mermaid-${index}`;
+          container.textContent = source;
+          target.dataset.mermaidProcessed = "true";
+          target.replaceWith(container);
+        });
+      }
+
+      async function renderMermaid() {
+        replaceMermaidBlocks();
+        const nodes = document.querySelectorAll(".mermaid");
+        if (!nodes.length) {
+          return;
+        }
+
+        try {
+          await mermaid.run({ nodes });
+        } catch (error) {
+          console.error("Mermaid render failed", error);
+          nodes.forEach((node) => {
+            if (!node.querySelector("svg")) {
+              node.classList.add("mermaid-fallback");
+              node.innerHTML = `
+                <div class="mermaid-error">
+                  <strong>Diagram unavailable</strong>
+                  <p>This Mermaid chart could not be rendered in the current browser context.</p>
+                  <pre>${node.textContent}</pre>
+                </div>
+              `;
+            }
+          });
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", renderMermaid);
     </script>
   </head>
   <body>
-    <div class="container-lg px-3 my-5 markdown-body">
-      <header>
-        <h1><a href="{{ "/" | absolute_url }}">{{ site.title }}</a></h1>
-        <p>{{ site.description }}</p>
-      </header>
-      <div class="tutorial-content">
-        {% include navigation.html %}
-        <main>
-          {{ content }}
+    <div class="site-shell">
+      <aside class="site-sidebar">
+        <div class="site-sidebar__inner">
+          <a class="site-brand" href="{{ '/' | relative_url }}">
+            <span class="site-brand__eyebrow">Codebase Guide</span>
+            <span class="site-brand__title">{{ site.title }}</span>
+            <span class="site-brand__copy">{{ site.description }}</span>
+          </a>
+          {% include navigation.html %}
+        </div>
+      </aside>
+
+      <div class="site-main">
+        <header class="site-topbar">
+          <a class="site-topbar__home" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+          <div class="site-topbar__links">
+            <a href="https://github.com/AustinZ21/EggHatch-AI">Source Repo</a>
+            <a href="https://github.com/AustinZ21/EggHatch-AI-Tutorial">Tutorial Repo</a>
+          </div>
+        </header>
+
+        <main class="site-content">
+          {% if page.title %}
+          <div class="page-intro">
+            <p class="page-intro__label">EggHatch-AI Tutorial</p>
+            <h1>{{ page.title }}</h1>
+          </div>
+          {% endif %}
+          <div class="page-body">
+            {{ content }}
+          </div>
         </main>
+
+        <footer class="site-footer">
+          <p>Generated from the EggHatch-AI codebase and refreshed for the latest open-source prototype scope.</p>
+        </footer>
       </div>
-      <footer class="site-footer">
-        <p>Generated with <a href="https://github.com/The-Pocket/Tutorial-Codebase-Knowledge">AI Codebase Knowledge Builder</a></p>
-      </footer>
     </div>
   </body>
 </html>

@@ -1,7 +1,6 @@
 ---
 layout: default
-title: "# Chapter 3: LLM Client
-"
+title: "Chapter 3: LLM Client"
 ---
 # Chapter 3: LLM Client
 

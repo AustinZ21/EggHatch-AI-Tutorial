@@ -1,7 +1,6 @@
 ---
 layout: default
-title: "# Chapter 7: Agent State
-"
+title: "Chapter 7: Agent State"
 ---
 # Chapter 7: Agent State
 
@@ -57,6 +56,15 @@ Here's how the Agent State would evolve:
 *   **After `synthesize_response`:** Adds the final answer. `{"user_query": ..., "budget": ..., "task_queue": [], "trend_insights": {...}, "sentiment_analysis": {...}, "final_response": "Based on...", ...}`
 
 The final `final_response` is only possible because the `synthesize_response` step could access the `user_query`, `budget`, `trend_insights`, and `sentiment_analysis` from the Agent State.
+
+## What Changed In The Latest Repo
+
+`trend_insights` now does more than hold review and recommendation summaries. For explicit comparison queries, it can also carry a structured `comparison` object with ranked candidates, reasons, and tradeoffs.
+
+That means the Agent State now supports both:
+
+- unstructured context for the LLM response layer
+- structured context for direct UI rendering
 
 ## How the Agent State Works (High Level Flow)
 

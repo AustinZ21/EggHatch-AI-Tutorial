@@ -1,7 +1,6 @@
 ---
 layout: default
-title: "# Chapter 8: Prompts
-"
+title: "Chapter 8: Prompts"
 ---
 # Chapter 8: Prompts
 
@@ -32,6 +31,16 @@ Without prompts, our [Master Agent (Orchestrator)]({{ site.baseurl }}/02_master_
 *   **Response Generation:** How does the system turn all the collected insights (from the [Agent State]({{ site.baseurl }}/07_agent_state_.html)) into a coherent, friendly answer? It uses a prompt to instruct the AI on what to include and how to format it.
 
 Prompts are the essential interface between our system's logic (deciding *what* needs to be done) and the AI model's capability (actually doing the language processing task).
+
+## What Changed In The Latest Repo
+
+The response synthesis prompt now has to cooperate with the new structured comparison layer. If comparison data is present, the final answer is expected to explain:
+
+- which laptop wins
+- why it wins
+- what the main tradeoff is
+
+This is a subtle but important shift. The prompt is no longer only summarizing trends; it is now coordinating with a deterministic comparison object.
 
 ## The Use Case: Getting a Recommendation (Again!)
 

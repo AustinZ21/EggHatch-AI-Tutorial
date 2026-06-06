@@ -1,7 +1,6 @@
 ---
 layout: default
-title: "# Chapter 6: Trend Analysis Agent
-"
+title: "Chapter 6: Trend Analysis Agent"
 ---
 # Chapter 6: Trend Analysis Agent
 
@@ -85,6 +84,7 @@ What does the output look like? The `analysis_results` dictionary contains sever
 *   `sentiment_overview`: An overall sentiment summary (similar to what the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html) provides directly).
 *   `recommendations`: Text suggestions based on the trends (e.g., "Emphasize performance in marketing").
 *   `top_laptops`: A list of laptops recommended based on criteria like ratings and potential relevance to the query.
+*   `comparison`: A structured comparison object for explicit comparison queries, containing the recommended laptop, ranked candidates, dimension winners, reasons, and tradeoffs.
 
 This structured output makes it easy for the [Master Agent]({{ site.baseurl }}/02_master_agent__orchestrator__.html) to incorporate these findings into the final response.
 
@@ -118,6 +118,12 @@ sequenceDiagram
 ```
 
 The Trend Analysis Agent is a coordinator itself in this flow. It depends heavily on the [Data Pipeline]({{ site.baseurl }}/04_data_pipeline_.html) for its input data and the [Sentiment Analysis Agent]({{ site.baseurl }}/05_sentiment_analysis_agent_.html) for sentiment scoring. It also uses various NLP (Natural Language Processing) techniques and models internally to understand the text content.
+
+## What Changed In The Latest Repo
+
+The latest EggHatch-AI version adds a deterministic comparison layer on top of trend analysis. The trend analysis module still produces review-driven insights, but it now also prepares a comparison-ready payload when the user explicitly asks for one.
+
+That change is important because it makes the analysis layer more useful for decision support, not just summary generation.
 
 ## Under the Hood: Inside `app/agents/trend_analysis.py`
 

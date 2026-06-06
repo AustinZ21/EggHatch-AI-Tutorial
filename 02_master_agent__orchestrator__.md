@@ -205,6 +205,12 @@ This code sets up the workflow. It says, "Start with `understand_query`. Then, b
 
 This structure makes the Master Agent powerful and flexible. It can handle different types of queries by following different paths through the graph and calling different specialist agents as needed.
 
+## What Changed In The Latest Repo
+
+The latest EggHatch-AI codebase adds one more responsibility to the orchestration flow: it now passes along a structured comparison payload for explicit laptop comparison questions.
+
+That means the Master Agent is no longer only orchestrating analysis and prose synthesis. It now also coordinates a deterministic explanation layer that the dashboard can render directly.
+
 ### The Journey of a Query Visualized
 
 Here's a simplified look at how a query travels through the Master Agent's workflow, interacting with other components:

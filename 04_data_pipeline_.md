@@ -1,7 +1,6 @@
 ---
 layout: default
-title: "# Chapter 4: Data Pipeline
-"
+title: "Chapter 4: Data Pipeline"
 ---
 # Chapter 4: Data Pipeline
 

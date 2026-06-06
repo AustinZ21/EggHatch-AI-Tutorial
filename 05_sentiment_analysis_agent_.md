@@ -1,7 +1,6 @@
 ---
 layout: default
-title: "# Chapter 5: Sentiment Analysis Agent
-"
+title: "Chapter 5: Sentiment Analysis Agent"
 ---
 # Chapter 5: Sentiment Analysis Agent
 
