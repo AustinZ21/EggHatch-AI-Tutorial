@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <script src="{{ '/script.js' | relative_url }}" defer></script>
     <script type="module">
       import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
 
@@ -92,6 +93,12 @@
     <div class="site-shell">
       <aside class="site-sidebar">
         <div class="site-sidebar__inner">
+          <div class="site-sidebar__toolbar">
+            <button class="sidebar-toggle" type="button" aria-expanded="true" aria-controls="tutorial-nav">
+              <span class="sidebar-toggle__icon" aria-hidden="true">||</span>
+              <span class="sidebar-toggle__label">Fold chapters</span>
+            </button>
+          </div>
           <a class="site-brand" href="{{ '/' | relative_url }}">
             <span class="site-brand__eyebrow">Codebase Guide</span>
             <span class="site-brand__title">{{ site.title }}</span>
@@ -103,7 +110,13 @@
 
       <div class="site-main">
         <header class="site-topbar">
-          <a class="site-topbar__home" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+          <div class="site-topbar__left">
+            <button class="sidebar-toggle sidebar-toggle--topbar" type="button" aria-expanded="true" aria-controls="tutorial-nav">
+              <span class="sidebar-toggle__icon" aria-hidden="true">||</span>
+              <span class="sidebar-toggle__label">Chapters</span>
+            </button>
+            <a class="site-topbar__home" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+          </div>
           <div class="site-topbar__links">
             <a href="https://github.com/AustinZ21/EggHatch-AI">Source Repo</a>
             <a href="https://github.com/AustinZ21/EggHatch-AI-Tutorial">Tutorial Repo</a>

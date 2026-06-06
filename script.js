@@ -1,47 +1,39 @@
-// EggHatch-AI Tutorial Scripts
+document.addEventListener("DOMContentLoaded", () => {
+  const storageKey = "egghatch-tutorial-sidebar-collapsed";
+  const body = document.body;
+  const sidebar = document.querySelector(".site-sidebar");
+  const toggleButtons = Array.from(document.querySelectorAll(".sidebar-toggle"));
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Highlight current page in navigation
-    const currentPage = window.location.pathname.split('/').pop();
-    const navLinks = document.querySelectorAll('.sidebar-nav a');
-    
-    navLinks.forEach(link => {
-        const linkPage = link.getAttribute('href');
-        if (currentPage === linkPage || 
-            (currentPage === '' && linkPage === 'index.html')) {
-            link.parentElement.classList.add('active');
-        }
+  if (!sidebar || !toggleButtons.length) {
+    return;
+  }
+
+  const setSidebarState = (collapsed) => {
+    body.classList.toggle("sidebar-collapsed", collapsed);
+
+    toggleButtons.forEach((button) => {
+      button.setAttribute("aria-expanded", String(!collapsed));
+
+      const label = button.querySelector(".sidebar-toggle__label");
+      const icon = button.querySelector(".sidebar-toggle__icon");
+
+      if (label) {
+        label.textContent = collapsed ? "Unfold chapters" : "Fold chapters";
+      }
+
+      if (icon) {
+        icon.textContent = collapsed ? "[]" : "||";
+      }
     });
-    
-    // Mobile menu toggle (for responsive design)
-    const createMobileMenu = () => {
-        const sidebar = document.querySelector('.sidebar');
-        const menuButton = document.createElement('button');
-        menuButton.classList.add('mobile-menu-toggle');
-        menuButton.innerHTML = '<i class="fas fa-bars"></i>';
-        
-        document.querySelector('.content header').prepend(menuButton);
-        
-        menuButton.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-    };
-    
-    // Only create mobile menu if screen is small
-    if (window.innerWidth <= 768) {
-        createMobileMenu();
-    }
-    
-    // Add smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
+  };
+
+  setSidebarState(window.localStorage.getItem(storageKey) === "true");
+
+  toggleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextCollapsed = !body.classList.contains("sidebar-collapsed");
+      setSidebarState(nextCollapsed);
+      window.localStorage.setItem(storageKey, String(nextCollapsed));
     });
+  });
 });
